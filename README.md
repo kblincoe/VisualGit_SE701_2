@@ -83,14 +83,6 @@ This is used to allow users to see the different types of changes easily and onc
 ### Pushing & Pulling from remote
 The pulling and pushing currently works for changes which are made on master and origin/master by syncing these up. When the pull button is clicked, any changes on the remote repository will be added to the local repository and the graph will be updated. When pushing, the same process applies. The changes on master will be pushed to the remote repository.
 
-# Future work
-
-### Branching
-Branch support is the most important feature to be developed in the future. In order to properly support Git workflows, the ability to make new branches and manage them is extremely important. This would be available through the top bar which could contain a drop-down menu of all the branches. This functionality
-
-### Merging & Conflict resolution
-Being able to merge branches and resolve conflicts in VisualGit is an important part of the workflow and is something which would help beginners to understand the merging process and how conflicts are handled within Git. This would likely be part of the file difference panel which would highlight the different changes.
-
 
 # Contributing
 We are open to pull requests with new features or improvements.
