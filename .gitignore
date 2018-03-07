@@ -5,3 +5,4 @@ dist/
 stylesheets/variables.css
 npm-debug.log
 git-history*
+login.json
