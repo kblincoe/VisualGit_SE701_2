@@ -392,3 +392,7 @@ body .footer .git-command {
 .file-deleted {
   background-color: #ff2448;
 }
+
+.file-panel {
+  overflow: scroll;
+}
