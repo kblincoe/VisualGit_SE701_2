@@ -1,5 +1,5 @@
 import { Component } from "@angular/core";
-
+import { openForgotPasswordPage } from "../misc/forgotPassword";
 
 @Component({
   selector: "user-auth",
@@ -17,6 +17,7 @@ import { Component } from "@angular/core";
           </ul>
         </div>
       </nav>
+
       <form role="form" style="text-align:center; margin-top:100px">
         <label>
           <h1>VisualGit</h1>
@@ -27,10 +28,12 @@ import { Component } from "@angular/core";
           <input id="username" type="text" class="form-control" placeholder="username" aria-describedby="basic-addon1">
         </div>
         <br>
-
         <div class="input-group" style="width:280px;">
           <span class="input-group-addon" id="basic-addon1">@</span>
           <input id="password" type="password" class="form-control" placeholder="password" aria-describedby="basic-addon1">
+        </div>
+        <div style="padding-top: 5px;">
+          <a href="javascript:void(0);" (click)="openForgotPasswordPage()" style="padding-left: 170px;">Forgot Password</a>
         </div>
         <br>
         <div>
@@ -46,5 +49,9 @@ import { Component } from "@angular/core";
 export class AuthenticateComponent {
   switchToMainPanel(): void {
     signInPage(switchToMainPanel);
+  }
+
+  openForgotPasswordPage(): void {
+    openForgotPasswordPage();
   }
 }

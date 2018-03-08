@@ -1,6 +1,7 @@
 import { Component } from "@angular/core";
 import { RepositoryService } from "../services/repository.service";
 import { GraphService } from "../services/graph.service";
+import { openForgotPasswordPage } from "../misc/forgotPassword";
 
 @Component({
   selector: "app-header",
@@ -61,6 +62,7 @@ import { GraphService } from "../services/graph.service";
                 <input type="password" class="form-control" id="Password1" placeholder="Password" required />
               </div>
               <button type="submit" class="btn btn-success" (click)="switchToMainPanel()">Sign in</button>
+              <button type="submit" class="btn btn-danger" (click)="openForgotPasswordPage()">Forgot Password</button>
             </form>
           </div>
 
@@ -146,5 +148,9 @@ export class HeaderComponent   {
 
   switchToMainPanel(): void {
     signInHead(collpaseSignPanel);
+  }
+
+  openForgotPasswordPage(): void {
+    openForgotPasswordPage();
   }
 }
