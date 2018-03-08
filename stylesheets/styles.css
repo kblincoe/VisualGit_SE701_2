@@ -203,6 +203,24 @@ body .file-panel .commit-panel .commit-button:hover {
   opacity: 0.8;
 }
 
+body .file-panel .clean-panel .clean-button {
+  display: block;
+  margin-left: auto;
+  margin-right: auto;
+  margin-top: 10px;
+  margin-bottom: 10px;
+  height: 30px;
+  border-radius: 10px;
+  border: 0;
+  padding: 0 15px;
+  background-color: #dd4b39;
+  color: #fff;
+}
+
+body .file-panel .clean-panel .clean-button:hover {
+  opacity: 0.8;
+}
+
 body .body-panel {
   width: 80%;
   float: right;

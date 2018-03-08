@@ -48,8 +48,14 @@ document.addEventListener('DOMContentLoaded', function() {
   setTimeout(function() {
     // Add click event to Commit button
     document.getElementById('commit-button').addEventListener("click", function() {
-      console.log("clicked");
+      console.log("commit clicked");
       addAndCommit();
+    });
+
+    // Add click event to Clean button
+    document.getElementById('clean-button').addEventListener("click", function() {
+      console.log("clean clicked");
+      cleanCurrentRepo();
     });
   }, 2000);
 
