@@ -12,6 +12,10 @@ p, h1 {
   z-index: 2;
 }
 
+.add-repository-button:hover {
+    cursor: pointer;
+}
+
 .btn.btn-circle {
   border-radius: 50px;
 }
@@ -117,8 +121,16 @@ body .navbar .fa-cloud-upload {
   margin-top: 8px;
 }
 
+body .navbar .fa-cloud-upload:hover {
+    cursor: pointer;
+}
+
 body .navbar .fa-cloud-download {
   margin-top: 8px;
+}
+
+body .navbar .fa-cloud-download:hover {
+    cursor: pointer;
 }
 /*
 body .navbar .dropdown-toggle {
