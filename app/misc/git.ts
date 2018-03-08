@@ -457,12 +457,18 @@ function resetCommit(name: string) {
   });
 }
 
-function revertCommit(name: string) {
+function revertCommit(name: string, commitId: string) {
   let repos;
   Git.Repository.open(repoFullPath)
   .then(function(repo) {
     repos = repo;
     console.log(1.0);
+    
+    if (commitId) {
+      addCommand("git revert " + commitId);
+      return Git.Commit.lookup(repos, commitId);
+    }
+
     addCommand("git revert " + name + "~1");
     return Git.Reference.nameToId(repo, name);
   })
@@ -578,7 +584,7 @@ function displayModifiedFiles() {
             if (fileElement.className === "file file-created") {
               printNewFile(file.filePath);
             } else {
-              printFileDiff(file.filePath)；
+              printFileDiff(file.filePath);
             }
           } else {
             hideDiffPanel();

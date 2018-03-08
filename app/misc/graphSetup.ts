@@ -227,7 +227,7 @@ function drawGraph() {
       toNode = nodes.get(toNode);
     } else if (flag === 'abstract' && abNodes.get(toNode)['shape'] === 'box') {
       toNode = abNodes.get(toNode);
-    } else if (flag === 'basic' && bsNodes.get(toNode)['shape'] === 'box') {
+    } else if (flag === 'basic' && (bsNodes.get(toNode)['shape'] === 'box') || bsNodes.get(toNode)['shape'] === 'circularImage') {
       toNode = bsNodes.get(toNode);
     } else {
       toNode = undefined;
