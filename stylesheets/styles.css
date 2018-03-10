@@ -69,6 +69,42 @@ p, h1 {
   border-bottom: 2px solid #181818;
 }
 
+.navbar-green {
+  background-color: #e6ffcc;
+  border-bottom: 2px solid #ceff99;
+}
+
+.navbar-green .navbar-nav > li > a:hover,
+.navbar-green .navbar-nav > li > a:focus {
+  text-decoration: none;
+  background-color: #e6ffcc;  
+}
+
+.navbar-green .navbar-nav > .open > a, 
+.navbar-green .navbar-nav > .open > a:focus, 
+.navbar-green .navbar-nav > .open > a:hover {
+  color: #337ab7;
+  background-color: #e6ffcc;
+}
+
+.navbar-blue {
+  background-color: #e6f2ff;
+  border-bottom: 2px solid #cce5ff;
+}
+
+.navbar-blue .nav > li > a:hover,
+.navbar-blue .nav > li > a:focus {
+  text-decoration: none;
+  background-color: #e6f2ff;  
+}
+
+.navbar-blue .navbar-nav > .open > a, 
+.navbar-blue .navbar-nav > .open > a:focus, 
+.navbar-blue .navbar-nav > .open > a:hover {
+  color: #337ab7;
+  background-color: #e6f2ff;
+}
+
 #branchOptions {
   position: absolute;
   display:none;
