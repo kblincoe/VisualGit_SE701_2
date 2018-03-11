@@ -54,6 +54,11 @@ function openRepository() {
   let localPath = document.getElementById("repoOpen").value;
   let fullLocalPath = require("path").join(__dirname, localPath);
 
+  if (localPath.length <= 0) {
+    updateModalText("Error opening repository. Location cannot be empty!");
+    return;
+  }
+
   console.log("Trying to open repository at " + fullLocalPath);
   displayModal("Opening Local Repository...");
 
