@@ -444,3 +444,7 @@ body .footer .git-command {
 .file-panel {
   overflow: scroll;
 }
+
+.modal-body {
+  word-wrap: break-word;
+}
