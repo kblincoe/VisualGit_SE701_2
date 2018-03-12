@@ -42,8 +42,8 @@ import { openForgotPasswordPage } from "../misc/forgotPassword";
           </ul>
 
           <ul class="navbar-nav col-md-4 hidden-xs">
-            <li class="upload"><i class="fa fa-cloud-upload fa-2x col-md-2" aria-hidden="true" style="color:white" onclick="pushToRemote()" title="Push"></i></li>
-            <li class="download"><i class="fa fa-cloud-download fa-2x col-md-2" aria-hidden="true" style="color:white" onclick="pullFromRemote()" title="Pull"></i></li>
+            <li class="upload"><i class="fa fa-cloud-upload fa-2x col-md-2" aria-hidden="true" onclick="pushToRemote()" title="Push"></i></li>
+            <li class="download"><i class="fa fa-cloud-download fa-2x col-md-2" aria-hidden="true" onclick="pullFromRemote()" title="Pull"></i></li>
           </ul>
 
           <ul class="navbar-nav navbar-right hidden-xs">

@@ -155,7 +155,7 @@ body .navbar .dropdown-menu a {
 }*/
 
 body .navbar .fa-cloud-upload {
-  margin-top: 8px;
+  margin: 4px;
 }
 
 body .navbar .fa-cloud-upload:hover {
@@ -163,7 +163,7 @@ body .navbar .fa-cloud-upload:hover {
 }
 
 body .navbar .fa-cloud-download {
-  margin-top: 8px;
+  margin: 4px;
 }
 
 body .navbar .fa-cloud-download:hover {
@@ -454,4 +454,15 @@ body .footer .git-command {
 
 .modal-body {
   word-wrap: break-word;
+}
+.fa-cloud-download, .fa-cloud-upload {
+  color: #dddddd;
+  border: 1px solid #ffffff;
+  border-radius: 10px;
+  width: 72px;
+}
+
+.fa-cloud-download:hover, .fa-cloud-upload:hover {
+  color: #ffffff;
+  border: 1px solid #cccccc;
 }
