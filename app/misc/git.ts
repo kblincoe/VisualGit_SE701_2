@@ -564,26 +564,33 @@ function displayModifiedFiles() {
         let checkbox = document.createElement("input");
         checkbox.type = "checkbox";
         checkbox.className = "checkbox";
+        /*
+         * When checkbox is clicked, fileElement.showOrHideDiffPanel is called,
+         * so checkbox.showOrHideDiffPanel is called to nullify the previous call.
+         */
+        checkbox.onclick = showOrHideDiffPanel;
         fileElement.appendChild(checkbox);
 
         document.getElementById("files-changed").appendChild(fileElement);
 
-        fileElement.onclick = function() {
-          let doc = document.getElementById("diff-panel");
-          console.log(doc.style.width + 'oooooo');
-          if (doc.style.width === '0px' || doc.style.width === '') {
-            displayDiffPanel();
-            document.getElementById("diff-panel-body").innerHTML = "";
+        fileElement.onclick = showOrHideDiffPanel;
+      }
 
-            if (fileElement.className === "file file-created") {
-              printNewFile(file.filePath);
-            } else {
-              printFileDiff(file.filePath);
-            }
+      function showOrHideDiffPanel() {
+        let doc = document.getElementById("diff-panel");
+        console.log(doc.style.width + 'oooooo');
+        if (doc.style.width === '0px' || doc.style.width === '') {
+          displayDiffPanel();
+          document.getElementById("diff-panel-body").innerHTML = "";
+
+          if (fileElement.className === "file file-created") {
+            printNewFile(file.filePath);
           } else {
-            hideDiffPanel();
+            printFileDiff(file.filePath);
           }
-        };
+        } else {
+          hideDiffPanel();
+        }
       }
 
       function printNewFile(filePath) {
