@@ -114,6 +114,7 @@ body {
   margin: 0;
   width: 100vw;
   height: 100vh;
+  overflow: hidden;
 }
 
 body .header {
@@ -180,6 +181,7 @@ body .file-panel {
   background-color: #282828;
   float: left;
   z-index: 0;
+  overflow: auto;
 }
 
 body .file-panel .modified-files-header .select-all-message {
@@ -436,7 +438,7 @@ body .footer {
   border-top: 2px solid #181818;
   position: fixed;
   bottom: 0;
-  overflow-y: scroll;
+  overflow-y: auto;
 }
 
 body .footer p {
