@@ -77,11 +77,11 @@ p, h1 {
 .navbar-green .navbar-nav > li > a:hover,
 .navbar-green .navbar-nav > li > a:focus {
   text-decoration: none;
-  background-color: #e6ffcc;  
+  background-color: #e6ffcc;
 }
 
-.navbar-green .navbar-nav > .open > a, 
-.navbar-green .navbar-nav > .open > a:focus, 
+.navbar-green .navbar-nav > .open > a,
+.navbar-green .navbar-nav > .open > a:focus,
 .navbar-green .navbar-nav > .open > a:hover {
   color: #337ab7;
   background-color: #e6ffcc;
@@ -95,11 +95,11 @@ p, h1 {
 .navbar-blue .nav > li > a:hover,
 .navbar-blue .nav > li > a:focus {
   text-decoration: none;
-  background-color: #e6f2ff;  
+  background-color: #e6f2ff;
 }
 
-.navbar-blue .navbar-nav > .open > a, 
-.navbar-blue .navbar-nav > .open > a:focus, 
+.navbar-blue .navbar-nav > .open > a,
+.navbar-blue .navbar-nav > .open > a:focus,
 .navbar-blue .navbar-nav > .open > a:hover {
   color: #337ab7;
   background-color: #e6f2ff;
@@ -167,6 +167,10 @@ body .navbar .fa-cloud-download {
 
 body .navbar .fa-cloud-download:hover {
     cursor: pointer;
+}
+
+body .navbar .branch-name:hover {
+  cursor:pointer;
 }
 /*
 body .navbar .dropdown-toggle {
