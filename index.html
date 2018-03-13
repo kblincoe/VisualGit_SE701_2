@@ -70,6 +70,8 @@ $('#repo-modal').on('hidden.bs.modal', function (e) {
    selector: ".file",
    build: function($trigger) {
      let branch;
+     let commitId;
+     
      var options = {
        items: {
          "edit": {
@@ -128,13 +130,26 @@ $.contextMenu({
 
     if (toNode !== undefined) {
       branch = toNode['label'];
-      if (branch.substring(0, 1) === '*') {
+      commitId = toNode['commitId'];
+
+      if (branch && branch.substring(0, 1) === '*') {
         branch = branch.substring(1, branch.length);
+        
+        options.items['merge to HEAD'].callback = function(itemKey, opt) {
+          mergeInMenu(branch);
+        };
       }
-      options.items['merge to HEAD'].callback = function(itemKey, opt) {
-        console.log("lolololol");
-        mergeInMenu(branch);
-      };
+
+      if (commitId) {
+        options.items = {
+          "revert to previous": {
+            name: "revert this changeset",
+            callback: function(itemKey, opt) {
+              revertCommit("refs/heads/" + branch, commitId);
+            }
+          }
+        }
+      }
     } else {
       $('.network').data('contextMenuRoot').$('trigger').contextMenu('hide')
     }

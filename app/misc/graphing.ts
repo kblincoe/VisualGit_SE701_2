@@ -301,6 +301,7 @@ function makeBasicNode(c, column: number) {
     let title = "Number of Commits: " + count;
     bsNodes.add({
       id: id,
+      commitId: c.toString(),
       shape: "circularImage",
       title: title,
       image: img4User(name),

@@ -12,6 +12,9 @@ function signInHead(callback) {
   password = document.getElementById("Password1").value;
   console.log(username + '      ' + password);
   getUserInfo(callback);
+  
+  document.getElementById("Email1").value = "";
+  document.getElementById("Password1").value = "";
 }
 
 function signInPage(callback) {
