@@ -132,6 +132,8 @@ body .file-panel {
   background-color: #282828;
   float: left;
   z-index: 0;
+  overflow-y: scroll;
+  padding-bottom: 10px;
 }
 
 body .file-panel .modified-files-header .select-all-message {
