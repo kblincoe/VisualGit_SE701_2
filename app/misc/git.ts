@@ -1,5 +1,6 @@
 import * as nodegit from "git";
-import NodeGit, { Status, Repository, StatusFile } from "nodegit";
+import NodeGit, { Status } from "nodegit";
+
 let opn = require('opn');
 let $ = require("jquery");
 let Git = require("nodegit");
@@ -660,48 +661,4 @@ function displayModifiedFiles() {
   function(err) {
     console.log("waiting for repo to be initialised");
   });
-}
-
-function cleanCurrentRepo() {
-  Git.Repository.open(repoFullPath)
-    .then(cleanRepo)
-    .then(function(repository: Repository) {
-      addCommand('git clean -f');
-      refreshAll(repository);
-      displayModifiedFiles();
-    });
-}
-
-function cleanRepo(repository: Repository) {
-  repository.getStatus()
-    .then(function(arrayStatusFile: StatusFile[]) {
-      removeUntrackedFiles(arrayStatusFile);
-    });
-
-  return repository;
-}
-
-function removeUntrackedFiles(arrayStatusFile: StatusFile[]) {
-  let filesToClean: String[] = [];
-
-  arrayStatusFile.forEach(function(statusFile: StatusFile) {
-
-    // Files marked as new are untracked, hence should be removed
-    // Files removed with fs as nodegit does not have implementation of git clean
-    if (statusFile.isNew()) {
-      filesToClean.push(<string>statusFile.path());
-      let filePath: string = <string>statusFile.path()
-
-      removeFileFromRepo(statusFile);
-    }
-
-  });
-}
-
-function removeFileFromRepo(statusFile: StatusFile) {
-  fs.unlink(repoFullPath + '\\' + statusFile.path(), function (err) {
-    if (err) {
-      addCommand('git clean failed: ' + err);
-    }
-  }); 
 }
