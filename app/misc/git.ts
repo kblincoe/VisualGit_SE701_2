@@ -463,7 +463,7 @@ function revertCommit(name: string, commitId: string) {
   .then(function(repo) {
     repos = repo;
     console.log(1.0);
-    
+
     if (commitId) {
       addCommand("git revert " + commitId);
       return Git.Commit.lookup(repos, commitId);
@@ -572,9 +572,16 @@ function displayModifiedFiles() {
         checkbox.className = "checkbox";
         fileElement.appendChild(checkbox);
 
+        checkbox.onclick = function(this) {
+          console.debug(this);
+          if (this.checked == false) {
+            clearSelectAllCheckbox();
+          }
+        }
+
         document.getElementById("files-changed").appendChild(fileElement);
 
-        fileElement.onclick = function() {
+        fileElement.onclick = function(this) {
           let doc = document.getElementById("diff-panel");
           console.log(doc.style.width + 'oooooo');
           if (doc.style.width === '0px' || doc.style.width === '') {
