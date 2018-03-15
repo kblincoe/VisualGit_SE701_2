@@ -1,4 +1,5 @@
 "use strict";
+exports.__esModule = true;
 var opn = require('opn');
 var $ = require("jquery");
 var Git = require("nodegit");
@@ -528,25 +529,27 @@ function displayModifiedFiles() {
                 var checkbox = document.createElement("input");
                 checkbox.type = "checkbox";
                 checkbox.className = "checkbox";
+                checkbox.onclick = showOrHideDiffPanel;
                 fileElement.appendChild(checkbox);
                 document.getElementById("files-changed").appendChild(fileElement);
-                fileElement.onclick = function () {
-                    var doc = document.getElementById("diff-panel");
-                    console.log(doc.style.width + 'oooooo');
-                    if (doc.style.width === '0px' || doc.style.width === '') {
-                        displayDiffPanel();
-                        document.getElementById("diff-panel-body").innerHTML = "";
-                        if (fileElement.className === "file file-created") {
-                            printNewFile(file.filePath);
-                        }
-                        else {
-                            printFileDiff(file.filePath);
-                        }
+                fileElement.onclick = showOrHideDiffPanel;
+            }
+            function showOrHideDiffPanel() {
+                var doc = document.getElementById("diff-panel");
+                console.log(doc.style.width + 'oooooo');
+                if (doc.style.width === '0px' || doc.style.width === '') {
+                    displayDiffPanel();
+                    document.getElementById("diff-panel-body").innerHTML = "";
+                    if (fileElement.className === "file file-created") {
+                        printNewFile(file.filePath);
                     }
                     else {
-                        hideDiffPanel();
+                        printFileDiff(file.filePath);
                     }
-                };
+                }
+                else {
+                    hideDiffPanel();
+                }
             }
             function printNewFile(filePath) {
                 var fileLocation = require("path").join(repoFullPath, filePath);
