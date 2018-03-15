@@ -1,5 +1,4 @@
 "use strict";
-Object.defineProperty(exports, "__esModule", { value: true });
 var vis = require("vis");
 var github1 = require("octonode");
 var nodeId = 1;
@@ -59,12 +58,18 @@ function sortCommits(commits) {
     }
 }
 function populateCommits() {
+    // reset variables for idempotency, shouldn't be needed when a class is created instead
     nodeId = 1;
     absNodeId = 1;
     basicNodeId = 1;
     commitList = [];
     parentCount = {};
     columns = [];
+    // Sort
+    // commitHistory = commits.sort(function(a, b) {
+    //   return a.timeMs() - b.timeMs();
+    // });
+    // Plot the graph
     for (var i = 0; i < commitHistory.length; i++) {
         var parents = commitHistory[i].parents();
         var nodeColumn = void 0;
@@ -78,6 +83,7 @@ function populateCommits() {
             }
         }
         if (parents.length === 0) {
+            // no parents means first commit so assign the first column
             columns[0] = true;
             nodeColumn = 0;
         }
@@ -86,6 +92,7 @@ function populateCommits() {
             var parentId = getNodeId(parent_2.toString());
             var parentColumn = commitList[parentId - 1]["column"];
             if (parentCount[parent_2] === 1) {
+                // first child
                 nodeColumn = parentColumn;
             }
             else {
@@ -113,6 +120,7 @@ function populateCommits() {
                 columns[index] = false;
             }
             if (parentCount[desiredParent] === 1) {
+                // first child
                 nodeColumn = desiredColumn;
             }
             else {
@@ -123,6 +131,7 @@ function populateCommits() {
         makeAbsNode(commitHistory[i], nodeColumn);
         makeBasicNode(commitHistory[i], nodeColumn);
     }
+    // Add edges
     for (var i = 0; i < commitHistory.length; i++) {
         addEdges(commitHistory[i]);
     }
@@ -285,7 +294,7 @@ function makeBasicNode(c, column) {
             physics: false,
             fixed: (id === 1),
             x: (column - 1) * spacingX,
-            y: (id - 1) * spacingY,
+            y: (id - 1) * spacingY
         });
         var shaList = [];
         shaList.push(c.toString());
@@ -297,7 +306,7 @@ function makeBasicNode(c, column) {
             colors: bDict[c.toString()],
             reference: reference,
             parents: c.parents(),
-            count: 1,
+            count: 1
         });
     }
     if (c.toString() in bname) {
@@ -317,7 +326,7 @@ function makeBasicNode(c, column) {
                 physics: false,
                 fixed: false,
                 x: (column - 0.6 * (i + 1)) * spacingX,
-                y: (id - 0.3) * spacingY,
+                y: (id - 0.3) * spacingY
             });
             bsEdges.add({
                 from: id + numOfCommits * (i + 1),
@@ -359,7 +368,7 @@ function makeAbsNode(c, column) {
             physics: false,
             fixed: (id === 1),
             x: (column - 1) * spacingX,
-            y: (id - 1) * spacingY,
+            y: (id - 1) * spacingY
         });
         if (c.toString() in bname) {
             for (var i = 0; i < bname[c.toString()].length; i++) {
@@ -378,7 +387,7 @@ function makeAbsNode(c, column) {
                     physics: false,
                     fixed: false,
                     x: (column - 0.6 * (i + 1)) * spacingX,
-                    y: (id - 0.3) * spacingY,
+                    y: (id - 0.3) * spacingY
                 });
                 abEdges.add({
                     from: id + numOfCommits * (i + 1),
@@ -396,7 +405,7 @@ function makeAbsNode(c, column) {
             email: email,
             reference: reference,
             parents: c.parents(),
-            count: 1,
+            count: 1
         });
     }
 }
@@ -416,7 +425,7 @@ function makeNode(c, column) {
         physics: false,
         fixed: true,
         x: (column - 1) * spacingX,
-        y: (id - 1) * spacingY,
+        y: (id - 1) * spacingY
     });
     if (c.toString() in bname) {
         for (var i = 0; i < bname[c.toString()].length; i++) {
@@ -435,7 +444,7 @@ function makeNode(c, column) {
                 physics: false,
                 fixed: false,
                 x: (column - 0.6 * (i + 1)) * spacingX,
-                y: (id - 0.3) * spacingY,
+                y: (id - 0.3) * spacingY
             });
             edges.add({
                 from: id + numOfCommits * (i + 1),
@@ -451,8 +460,9 @@ function makeNode(c, column) {
         column: column,
         email: email,
         reference: reference,
-        branch: flag,
+        branch: flag
     });
+    //console.log(commitList[id-1]['id'] + '   ' + id);
 }
 function makeEdge(sha, parentSha) {
     var fromNode = getNodeId(parentSha.toString());
@@ -476,7 +486,7 @@ function reCenter() {
         scale: 1,
         animation: {
             duration: 1000,
-            easingFunction: "easeInOutQuad",
+            easingFunction: "easeInOutQuad"
         }
     };
     network.focus(commitList[commitList.length - 1]["id"], moveOptions);

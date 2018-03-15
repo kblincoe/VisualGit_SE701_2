@@ -2,6 +2,14 @@ var cs = require('color-scheme');
 var before = 'default';
 ;
 function changeColor(color) {
+    // let scheme = new cs;
+    // scheme.from_hue(0)
+    //     .scheme('mono')
+    //     .variation('soft');
+    // let colors = scheme.colors();
+    // for (let i = 0; i < colors.length; i++) {
+    //   console.log(colors[i]);
+    // }
     console.log(color + '   ' + (color === 'white'));
     var head = document.getElementsByClassName('navbar');
     var headButton = document.getElementsByClassName('navbar-btn');
