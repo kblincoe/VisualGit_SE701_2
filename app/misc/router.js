@@ -2,18 +2,6 @@ var cred;
 function collpaseSignPanel() {
     $('#nav-collapse1').collapse('hide');
 }
-function showSignPanel() {
-    $('#nav-collapse1').collapse('show');
-}
-function toggleSignPanel() {
-    $('#nav-collapse1').collapse('toggle');
-}
-function switchToAuthenticatePanel() {
-    displayAuthenticatePanel();
-    hideAddRepositoryPanel();
-    hideFilePanel();
-    hideGraphPanel();
-}
 function switchToMainPanel() {
     hideAuthenticatePanel();
     hideAddRepositoryPanel();

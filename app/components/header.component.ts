@@ -48,8 +48,7 @@ import { openForgotPasswordPage } from "../misc/forgotPassword";
 
           <ul class="navbar-nav navbar-right hidden-xs">
             <li>
-              <!-- <a class="btn btn-default btn-outline btn-circle"  id="avatar" data-toggle="collapse" href="#nav-collapse1" aria-expanded="false" aria-controls="nav-collapse1" onclick="signOut()">Sign in</a> -->
-              <a class="btn btn-default btn-outline btn-circle"  id="avatar" (click)="clickSignOutButton()">Sign in</a>
+              <a class="btn btn-default btn-outline btn-circle"  id="avatar" data-toggle="collapse" href="#nav-collapse1" aria-expanded="false" aria-controls="nav-collapse1">Sign in</a>
             </li>
           </ul>
           <div class="collapse nav navbar-nav nav-collapse" id="nav-collapse1">
@@ -154,21 +153,4 @@ export class HeaderComponent   {
   openForgotPasswordPage(): void {
     openForgotPasswordPage();
   }
-
-  clickSignOutButton(): void {
-    
-    // toggleSignPanel(); Having it here nullifies the following collapse
-
-    if (document.getElementById('avatar').innerHTML == "Sign out") {
-
-      collpaseSignPanel();
-      signOut();
-
-    } else {
-
-     toggleSignPanel();
-
-    }
-  }
-
 }
