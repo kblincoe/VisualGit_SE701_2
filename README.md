@@ -10,7 +10,7 @@ You can get a summary of our project by reading our [cool poster](https://github
 npm (Node Package Manager) is used to manage VisualGit's dependencies, therefore it is required to install and run VisualGit.
 Follow the installation instructions below:
 
-#### Centos-based systems
+#### CentOS-based systems
 ````
 sudo yum install npm
 ````
@@ -21,11 +21,11 @@ sudo apt-get install npm
 ````
 
 #### Mac
-If you have homebrew installed:
+If you have Homebrew installed:
 ````
 brew install npm
 ````
-Otherwise download and install the latest version of [Node.j](https://nodejs.org/en/) (v6.2.1 or later)
+Otherwise download and install the latest version of [Node.js](https://nodejs.org/en/) (v6.2.1 or later)
 
 #### Windows
 Download and install the latest version of  [Node.js](https://nodejs.org/en/) (v6.2.1 or later)
@@ -51,12 +51,12 @@ npm start
 ````
 
 ### ssh-agent
-As VisualGit utilises SSH for user authentication, ensure you [generate an SSH key for your GitHub account](https://help.github.com/articles/generating-a-new-ssh-key-and-adding-it-to-the-ssh-agent/). If you are not running on Mac, you will also need to set up and run an ssh-agent to access your SSH key at run time without providing your credentials each time.
+As VisualGit utilises SSH for user authentication, ensure you [generate a SSH key for your GitHub account](https://help.github.com/articles/generating-a-new-ssh-key-and-adding-it-to-the-ssh-agent/). If you are not running on a Mac, you will also need to set up and run an ssh-agent to access your SSH key at run time without providing your credentials each time.
 
 # Development
 
 ### TypeScript
-[TypeScript](https://www.typescriptlang.org/) is a statically-typed superset of JavaScript that compiles into JavaScript. Most of our source files are written in TypeScript (.ts files), therefore you will need to run a TypeScript compiler to compile the source code to JavaScript (.js files) as you make changes, e.g. [typescript-compiler](https://www.npmjs.com/package/typescript-compiler) for Node.
+[TypeScript](https://www.typescriptlang.org/) is a statically-typed superset of JavaScript that compiles into JavaScript. Most of our source files are written in TypeScript (.ts files), therefore you will need to run a TypeScript compiler to compile your source code to JavaScript (.js files) as you make changes, e.g. [typescript-compiler](https://www.npmjs.com/package/typescript-compiler) for Node.
 
 ### Sass
 [Sass](http://sass-lang.com/) (Syntactically Awesome Style Sheets) is a CSS preprocessor with some handy extra features. All of our Style Sheets are written in Sass (.scss files), which compile into CSS (.css files). Therefore, you will need to a run a Sass-compiler to compile your .scss files into .css files as you make changes, e.g. [node-sass](https://www.npmjs.com/package/node-sass) for Node.
@@ -88,7 +88,7 @@ The pulling and pushing currently works for changes which are made on master and
 We are open to pull requests with new features or improvements.
 
 # Help
-Visualgit utilises a range of libraries and frameworks, more information on them can be found below:
+VisualGit utilises a range of libraries and frameworks, more information on them can be found below:
 
  - [Electron](http://electron.atom.io/)
  - [Node.js](https://nodejs.org/en/about/)
