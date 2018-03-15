@@ -13,6 +13,31 @@ let filesToAdd = [];
 let theirCommit = null;
 let modifiedFiles;
 
+function warnIfCommitsNotOnRemote() {
+
+  // Could not find a way to get the log of commits that are not on remotes with nodegit, so using simple-git instead
+  const simpleGit = require("simple-git");
+  const path = repoFullPath;
+
+  if (path == null || path == "") {
+    return;
+  }
+
+  simpleGit(path).raw(
+    [
+      "log" ,
+      "--branches", 
+      "--not" ,
+      "--remotes"
+    ], (err, result) => {
+
+      console.debug(result);
+      displayModal("WARNING: You have unsaved commits!");
+
+  });
+
+}
+
 function addAndCommit() {
   let repository;
 

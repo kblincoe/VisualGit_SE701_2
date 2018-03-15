@@ -9,7 +9,6 @@ function drawGraph() {
     abEdges = new vis.DataSet([]);
     nodes = new vis.DataSet([]);
     edges = new vis.DataSet([]);
-    // create a network
     var container = document.getElementById("my-network");
     container.innerHTML = '';
     var bsData = {
@@ -26,7 +25,7 @@ function drawGraph() {
     };
     options = {
         configure: {
-            enabled: false
+            enabled: false,
         },
         edges: {
             arrows: {
@@ -35,7 +34,7 @@ function drawGraph() {
                     scaleFactor: 0.6
                 },
                 middle: false,
-                from: false
+                from: false,
             },
             color: "#39c0ba",
             hoverWidth: 0,
@@ -45,10 +44,9 @@ function drawGraph() {
             smooth: {
                 enabled: true,
                 type: "cubicBezier",
-                // forceDirection: "horizontal",
                 roundness: 0.5
             },
-            width: 3
+            width: 3,
         },
         groups: {},
         interaction: {
@@ -68,11 +66,11 @@ function drawGraph() {
             selectable: true,
             selectConnectedEdges: false,
             tooltipDelay: 300,
-            zoomView: true
+            zoomView: true,
         },
         layout: {
             randomSeed: 1,
-            improvedLayout: true
+            improvedLayout: true,
         },
         manipulation: {
             enabled: false,
@@ -94,7 +92,7 @@ function drawGraph() {
                     }
                 },
                 borderWidth: 2,
-                borderWidthSelected: 2
+                borderWidthSelected: 2,
             }
         },
         nodes: {
@@ -110,13 +108,13 @@ function drawGraph() {
                 hover: {
                     border: "#F00",
                     background: "#FFF"
-                }
+                },
             },
-            shadow: true
+            shadow: true,
         },
         physics: {
-            enabled: false
-        }
+            enabled: false,
+        },
     };
     network = new vis.Network(container, bsData, options);
     getAllCommits(function (commits) {
@@ -137,7 +135,7 @@ function drawGraph() {
             scale: 1,
             animation: {
                 duration: 1000,
-                easingFunction: "easeInOutQuad"
+                easingFunction: "easeInOutQuad",
             }
         };
         network.focus(callback.nodes[0], moveOptions);
@@ -148,20 +146,18 @@ function drawGraph() {
             scale: 1,
             animation: {
                 duration: 1000,
-                easingFunction: "easeInOutQuad"
+                easingFunction: "easeInOutQuad",
             }
         };
         if (network.getScale() > 1.5 && callback.direction === '+' && flag === 'abstract') {
             network.setData(data);
             flag = 'node';
             network.fit(moveOptions);
-            //network.redraw();
         }
         else if (network.getScale() < 0.4 && callback.direction === '-' && flag === 'node') {
             network.setData(abData);
             flag = 'abstract';
             network.fit(moveOptions);
-            //network.redraw();
         }
         else if (network.getScale() > 1.5 && callback.direction === '+' && flag === 'basic') {
             network.setData(abData);
@@ -207,15 +203,5 @@ function drawGraph() {
             toNode = undefined;
         }
         console.log("toNode:  " + toNode);
-        //   if (toNode !== undefined) {
-        //     console.log("clicked !!!!!!!!")
-        //     network.selectNodes([toNode], [false]);
-        //     addBranchestoNode(nodes.get(toNode)['label']);
-        //     $("#branchOptions").css({
-        //     display: "block",
-        //     left: callback.pointer.DOM.x,
-        //     top: callback.pointer.DOM.y
-        //  });
-        //   }
     });
 }
