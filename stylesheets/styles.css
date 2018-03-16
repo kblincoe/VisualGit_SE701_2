@@ -484,3 +484,45 @@ body .footer .git-command {
   color: #ffffff;
   border: 1px solid #cccccc;
 }
+.loading {
+  color: #fff;
+  display: flex;
+  justify-content: center;
+  flex-flow: column;
+  height: 70vh;
+  background-color: #181818;
+  text-align: center;
+}
+
+.circleLoader {
+  stroke-dasharray: 200;
+  stroke-dashoffset:72;
+  transform-origin: center;
+}
+
+.spinner {
+  margin-top: 2rem;
+  min-width: 1.4rem;
+  min-height: 1.4rem;
+  animation: rotator 1s linear infinite;
+  stroke: white;
+  max-height: 10rem;
+  max-width: 10rem;
+  align-self: center;
+}
+
+.notLoading {
+  display: none;
+}
+
+@keyframes rotator {
+  0% { transform: rotate(0deg); }
+  100% { transform: rotate(360deg); }
+}
+.modal-title-warning {
+  color : red;
+}
+
+.modal-footer .btn.btn-pull {
+  background-color : #4CAF50;
+}
