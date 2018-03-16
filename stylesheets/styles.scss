@@ -142,6 +142,8 @@ body {
     height: 75vh;
     background-color: $dark-grey;
     float: left;
+    overflow-y: scroll;
+    padding-bottom: 10px;
 
     .modified-files-header {
 

@@ -573,6 +573,7 @@ function displayModifiedFiles() {
         fileElement.appendChild(checkbox);
 
         checkbox.onclick = function(this) {
+          showOrHideDiffPanel();
           console.debug(this);
           if (this.checked == false) {
             clearSelectAllCheckbox();
@@ -581,22 +582,24 @@ function displayModifiedFiles() {
 
         document.getElementById("files-changed").appendChild(fileElement);
 
-        fileElement.onclick = function(this) {
-          let doc = document.getElementById("diff-panel");
-          console.log(doc.style.width + 'oooooo');
-          if (doc.style.width === '0px' || doc.style.width === '') {
-            displayDiffPanel();
-            document.getElementById("diff-panel-body").innerHTML = "";
+        fileElement.onclick = showOrHideDiffPanel;
+      }
 
-            if (fileElement.className === "file file-created") {
-              printNewFile(file.filePath);
-            } else {
-              printFileDiff(file.filePath);
-            }
+      function showOrHideDiffPanel() {
+        let doc = document.getElementById("diff-panel");
+        console.log(doc.style.width + 'oooooo');
+        if (doc.style.width === '0px' || doc.style.width === '') {
+          displayDiffPanel();
+          document.getElementById("diff-panel-body").innerHTML = "";
+
+          if (fileElement.className === "file file-created") {
+            printNewFile(file.filePath);
           } else {
-            hideDiffPanel();
+            printFileDiff(file.filePath);
           }
-        };
+        } else {
+          hideDiffPanel();
+        }
       }
 
       function printNewFile(filePath) {

@@ -51,8 +51,18 @@ function downloadFunc(cloneURL, localPath) {
 }
 
 function openRepository() {
+
   let localPath = document.getElementById("repoOpen").value;
-  let fullLocalPath = require("path").join(__dirname, localPath);
+
+  // Windows does not have a case-sensitive filesystem, 
+  // true-case-path package is used here to extract the true-case filepath for the repo being opened
+  const path = require("path");
+  let fullLocalPath = path.join(__dirname, localPath);
+
+  const trueCasePathSync = require('true-case-path');
+  fullLocalPath = trueCasePathSync(fullLocalPath);
+
+  localPath = fullLocalPath.split(path.sep).pop();
 
   if (localPath.length <= 0) {
     updateModalText("Error opening repository. Location cannot be empty!");
