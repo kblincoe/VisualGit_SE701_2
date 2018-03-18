@@ -54,6 +54,8 @@ function getUserInfo(callback) {
             for (var i = 0; i < data.length; i++) {
                 var rep = Object.values(data)[i];
                 console.log(rep['html_url']);
+                var splitText = rep['html_url'].split(/\.|:|\//);
+                rep['name'] = splitText[splitText.length - 2] + "/" + splitText[splitText.length - 1];
                 displayBranch(rep['name'], "repo-dropdown", "selectRepo(this)");
                 repoList[rep['name']] = rep['html_url'];
             }
@@ -79,7 +81,8 @@ function getUserInfo(callback) {
 function selectRepo(ele) {
     url = repoList[ele.innerHTML];
     var butt = document.getElementById("cloneButton");
-    butt.innerHTML = 'Clone ' + ele.innerHTML;
+    var splitText = ele.innerHTML.split(/\.|:|\//);
+    butt.innerHTML = 'Clone ' + splitText[splitText.length - 1];
     butt.setAttribute('class', 'btn btn-primary');
     console.log(url + 'JJJJJJJJ' + ele.innerHTML);
 }

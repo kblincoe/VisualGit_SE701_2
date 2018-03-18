@@ -66,6 +66,8 @@ function getUserInfo(callback) {
       for (let i = 0; i < data.length; i++) {
         let rep = Object.values(data)[i];
         console.log(rep['html_url']);
+        let splitText = rep['html_url'].split(/\.|:|\//);
+        rep['name'] = splitText[splitText.length-2] + "/" + splitText[splitText.length-1];
         displayBranch(rep['name'], "repo-dropdown", "selectRepo(this)");
         repoList[rep['name']] = rep['html_url'];
       }
@@ -93,7 +95,8 @@ function getUserInfo(callback) {
 function selectRepo(ele) {
   url = repoList[ele.innerHTML];
   let butt = document.getElementById("cloneButton");
-  butt.innerHTML = 'Clone ' + ele.innerHTML;
+  let splitText = ele.innerHTML.split(/\.|:|\//);
+  butt.innerHTML = 'Clone ' + splitText[splitText.length-1];
   butt.setAttribute('class', 'btn btn-primary');
   console.log(url + 'JJJJJJJJ' + ele.innerHTML);
 }
