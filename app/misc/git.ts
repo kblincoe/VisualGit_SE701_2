@@ -462,7 +462,7 @@ function revertCommit(name: string, commitId: string) {
   .then(function(repo) {
     repos = repo;
     console.log(1.0);
-    
+
     if (commitId) {
       addCommand("git revert " + commitId);
       return Git.Commit.lookup(repos, commitId);
@@ -569,12 +569,15 @@ function displayModifiedFiles() {
         let checkbox = document.createElement("input");
         checkbox.type = "checkbox";
         checkbox.className = "checkbox";
-        /*
-         * When checkbox is clicked, fileElement.showOrHideDiffPanel is called,
-         * so checkbox.showOrHideDiffPanel is called to nullify the previous call.
-         */
-        checkbox.onclick = showOrHideDiffPanel;
         fileElement.appendChild(checkbox);
+
+        checkbox.onclick = function(this) {
+          showOrHideDiffPanel();
+          console.debug(this);
+          if (this.checked == false) {
+            clearSelectAllCheckbox();
+          }
+        }
 
         document.getElementById("files-changed").appendChild(fileElement);
 
