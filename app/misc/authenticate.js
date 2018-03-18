@@ -1,30 +1,29 @@
 var github = require("octonode");
-var username;
-var password;
 var aid, atoken;
 var client;
 var avaterImg;
 var repoList = {};
 var url;
 function signInHead(callback) {
-    username = document.getElementById("Email1").value;
-    password = document.getElementById("Password1").value;
-    console.log(username + '      ' + password);
+    setCredentials(document.getElementById("Email1").value, document.getElementById("password").value);
+    console.log('user has logged in successfully');
     getUserInfo(callback);
     document.getElementById("Email1").value = "";
     document.getElementById("Password1").value = "";
 }
 function signInPage(callback) {
-    username = document.getElementById("username").value;
-    password = document.getElementById("password").value;
+    setCredentials(document.getElementById("username").value, document.getElementById("password").value);
+    console.log('user has logged in successfully');
     getUserInfo(callback);
 }
-function getUserInfo(callback) {
+function setCredentials(username, password) {
     cred = Git.Cred.userpassPlaintextNew(username, password);
     client = github.client({
         username: username,
         password: password
     });
+}
+function getUserInfo(callback) {
     var ghme = client.me();
     ghme.info(function (err, data, head) {
         if (err) {
