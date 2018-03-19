@@ -21,7 +21,7 @@ function changeColor(color) {
   let footer = document.getElementById('footer');
   let arp = document.getElementById('add-repository-panel');
   let auth = document.getElementById('authenticate');
-  let ddl = document.getElementById('color-dropdown');
+  let ddlCollection = document.getElementsByClassName('dropdown-menu');
 
   if (color === 'white') {
     for (let i = 0; i < head.length; i++) {
@@ -54,8 +54,12 @@ function changeColor(color) {
     footer.style.borderTopColor = '#181818';
     arp.style.backgroundColor = '#D1D1D1';
     auth.style.backgroundColor = '#D6D6D6';
-    ddl.style.backgroundColor = '#D6D6D6';
-    ddl.style.color = '#FFFFFF';
+
+    for(let i = 0; i< ddlCollection.length; i++){
+      let ddl = ddlCollection[i];
+      ddl.setAttribute('style', 'background-color:#D6D6D6; color:#FFFFFF');
+    }
+    
     before = 'white';
   } else if (color === 'default') {
     for (let i = 0; i < head.length; i++) {
@@ -88,8 +92,12 @@ function changeColor(color) {
     footer.style.borderTopColor = '#181818';
     arp.style.backgroundColor = '#282828';
     auth.style.backgroundColor = '#282828';
-    ddl.style.backgroundColor = '#282828';
-    ddl.style.color = '#FFFFFF';
+
+    for(let i = 0; i< ddlCollection.length; i++){
+      let ddl = ddlCollection[i];
+      ddl.setAttribute('style', 'background-color:#282828; color:#FFFFFF');
+    }
+
     before = 'default';
   } else if (color === 'green') {
     for (let i = 0; i < head.length; i++) {
@@ -121,8 +129,12 @@ function changeColor(color) {
     footer.style.borderTopColor = '#CEFF99';
     arp.style.backgroundColor = '#e6ffcc';
     auth.style.backgroundColor = '#e6ffcc';
-    ddl.style.backgroundColor = '#e6ffcc';
-    ddl.style.color = '#181818';
+
+    for(let i = 0; i< ddlCollection.length; i++){
+      let ddl = ddlCollection[i];
+      ddl.setAttribute('style', 'background-color:#e6ffcc; color:#181818');
+    }
+
     before = 'green';
   } else if (color === 'blue') {
     for (let i = 0; i < head.length; i++) {
@@ -155,8 +167,12 @@ function changeColor(color) {
     footer.style.borderTopColor = '#cce5ff';
     arp.style.backgroundColor = '#e6f2ff';
     auth.style.backgroundColor = '#e6f2ff';
-    ddl.style.backgroundColor = '#e6f2ff';
-    ddl.style.color = '#181818';
+
+    for(let i = 0; i< ddlCollection.length; i++){
+      let ddl = ddlCollection[i];
+      ddl.setAttribute('style', 'background-color:#e6f2ff; color:#181818');
+    }
+    
     before = 'blue';
   }
 }

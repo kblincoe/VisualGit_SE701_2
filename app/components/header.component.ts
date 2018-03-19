@@ -66,6 +66,19 @@ import { openForgotPasswordPage } from "../misc/forgotPassword";
             </form>
           </div>
 
+          <ul class="nav navbar-nav col-md-1 hidden-xs">
+            <button class="btn btn-inverse dropdown-toggle btn-sm navbar-btn" id="color-scheme" data-toggle="dropdown">
+              color
+              <span class="caret"></span>
+            </button>
+            <ul class="dropdown-menu" id="color-dropdown" role="menu" aria-labelledby="branch-name">
+              <li class="white" onclick="changeColor('white')">white</li>
+              <li class="green" onclick="changeColor('green')">green</li>
+              <li class="blue" onclick="changeColor('blue')">blue</li>
+              <li class="default" onclick="changeColor('default')">default</li>
+            </ul>
+          </ul>
+
           <ul class="nav navbar-nav visible-xs">
             <li (click)="promptUserToAddRepository()"><a>&nbsp;&nbsp;add repository</a></li>
             <li class="dropdown">
