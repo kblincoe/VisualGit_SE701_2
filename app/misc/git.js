@@ -1,5 +1,5 @@
 "use strict";
-exports.__esModule = true;
+Object.defineProperty(exports, "__esModule", { value: true });
 var opn = require('opn');
 var $ = require("jquery");
 var Git = require("nodegit");
@@ -11,6 +11,22 @@ var repo, index, oid, remote, commitMessage;
 var filesToAdd = [];
 var theirCommit = null;
 var modifiedFiles;
+function warnIfCommitsNotOnRemote() {
+    var simpleGit = require("simple-git");
+    var path = repoFullPath;
+    if (path == null || path == "") {
+        return;
+    }
+    simpleGit(path).raw([
+        "log",
+        "--branches",
+        "--not",
+        "--remotes"
+    ], function (err, result) {
+        console.debug(result);
+        displayModal("WARNING: You have unsaved commits!");
+    });
+}
 function addAndCommit() {
     var repository;
     Git.Repository.open(repoFullPath)

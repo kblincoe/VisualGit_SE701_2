@@ -5,6 +5,16 @@ let avaterImg;
 let repoList = {};
 let url;
 
+function signOut() {
+
+  warnIfCommitsNotOnRemote();
+  switchToAuthenticatePanel();
+
+  let doc = document.getElementById("avatar");
+  doc.innerHTML = 'Sign in';
+
+}
+
 function signInHead(callback) {
   setCredentials(document.getElementById("Email1").value, 
                  document.getElementById("password").value);
