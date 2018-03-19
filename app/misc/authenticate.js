@@ -14,7 +14,7 @@ function signOut() {
     doc.innerHTML = 'Sign in';
 }
 function signInHead(callback) {
-    setCredentials(document.getElementById("Email1").value, document.getElementById("password").value);
+    setCredentials(document.getElementById("Email1").value, document.getElementById("Password1").value);
     console.log('user has logged in successfully');
     getUserInfo(callback);
     document.getElementById("Email1").value = "";
@@ -45,7 +45,6 @@ function autoFillPassword(callback) {
             var machineId_1 = require("node-machine-id");
             var uidSalt = saltedPassword.substring(pw.length, saltedPassword.length);
             var uidTime = saltedTime.substring(lastLogin.length, saltedTime.length);
-            //login details are deleted it does not belong to the original computer the details were generated for or if login details is older than 7 days
             if ((machineId_1.machineIdSync() == uidSalt) && (uidSalt == uidTime) && ((new Date).getTime() - lastLogin < 604800)) {
                 document.getElementById("username").value = obj.loginInfo[0]["username"];
                 document.getElementById("password").value = pw;
@@ -135,7 +134,7 @@ function cloneRepo() {
     var splitText = url.split(/\.|:|\//);
     var local;
     if (splitText.length >= 2) {
-        local = splitText[splitText.length - 2];
+        local = splitText[splitText.length - 1];
     }
     downloadFunc(url, local);
     url = null;
