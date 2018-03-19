@@ -39,7 +39,7 @@ function downloadFunc(cloneURL, localPath) {
   .then(function(repository) {
     console.log("Repo successfully cloned");
     updateModalText("Clone Successful, repository saved under: " + fullLocalPath);
-    addCommand("git clone " + cloneURL + " " + localPath);
+    addCommand("git clone " + cloneURL);
     repoFullPath = fullLocalPath;
     repoLocalPath = localPath;
     refreshAll(repository);
@@ -54,7 +54,7 @@ function openRepository() {
 
   let localPath = document.getElementById("repoOpen").value;
 
-  // Windows does not have a case-sensitive filesystem, 
+  // Windows does not have a case-sensitive filesystem,
   // true-case-path package is used here to extract the true-case filepath for the repo being opened
   const path = require("path");
   let fullLocalPath = path.join(__dirname, localPath);
@@ -298,7 +298,7 @@ function updateLocalPath() {
   let text = document.getElementById("repoClone").value;
   let splitText = text.split(/\.|:|\//);
   if (splitText.length >= 2) {
-    document.getElementById("repoSave").value = splitText[splitText.length - 2];
+    document.getElementById("repoSave").value = splitText[splitText.length - 1];
   }
 }
 

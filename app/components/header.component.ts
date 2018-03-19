@@ -42,13 +42,13 @@ import { openForgotPasswordPage } from "../misc/forgotPassword";
           </ul>
 
           <ul class="navbar-nav col-md-4 hidden-xs">
-            <li class="upload"><i class="fa fa-cloud-upload fa-2x col-md-2" aria-hidden="true" style="color:white" onclick="pushToRemote()" title="Push"></i></li>
-            <li class="download"><i class="fa fa-cloud-download fa-2x col-md-2" aria-hidden="true" style="color:white" onclick="pullFromRemote()" title="Pull"></i></li>
+            <li class="upload"><i class="fa fa-cloud-upload fa-2x col-md-2" aria-hidden="true" onclick="pushToRemote()" title="Push"></i></li>
+            <li class="download"><i class="fa fa-cloud-download fa-2x col-md-2" aria-hidden="true" onclick="pullFromRemote()" title="Pull"></i></li>
           </ul>
 
           <ul class="navbar-nav navbar-right hidden-xs">
             <li>
-              <a class="btn btn-default btn-outline btn-circle"  id="avatar" data-toggle="collapse" href="#nav-collapse1" aria-expanded="false" aria-controls="nav-collapse1">Sign in</a>
+              <a class="btn btn-default btn-outline btn-circle"  id="avatar" (click)="clickSignOutButton()">Sign in</a>
             </li>
           </ul>
           <div class="collapse nav navbar-nav nav-collapse" id="nav-collapse1">
@@ -65,6 +65,19 @@ import { openForgotPasswordPage } from "../misc/forgotPassword";
               <button type="submit" class="btn btn-danger" (click)="openForgotPasswordPage()">Forgot Password</button>
             </form>
           </div>
+
+          <ul class="nav navbar-nav col-md-1 hidden-xs">
+            <button class="btn btn-inverse dropdown-toggle btn-sm navbar-btn" id="color-scheme" data-toggle="dropdown">
+              color
+              <span class="caret"></span>
+            </button>
+            <ul class="dropdown-menu" id="color-dropdown" role="menu" aria-labelledby="branch-name">
+              <li class="white" onclick="changeColor('white')">white</li>
+              <li class="green" onclick="changeColor('green')">green</li>
+              <li class="blue" onclick="changeColor('blue')">blue</li>
+              <li class="default" onclick="changeColor('default')">default</li>
+            </ul>
+          </ul>
 
           <ul class="nav navbar-nav visible-xs">
             <li (click)="promptUserToAddRepository()"><a>&nbsp;&nbsp;add repository</a></li>
@@ -152,5 +165,22 @@ export class HeaderComponent   {
 
   openForgotPasswordPage(): void {
     openForgotPasswordPage();
+  }
+
+  clickSignOutButton(): void {
+     
+    // Can't have this here - nullifies the following collapse, has to be in else clause
+    // toggleSignPanel(); 
+  
+    if (document.getElementById('avatar').innerHTML == "Sign out") {
+  
+      collpaseSignPanel();
+      signOut();
+    
+    } else {
+
+      toggleSignPanel();
+  
+    }
   }
 }
