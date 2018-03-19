@@ -23,6 +23,10 @@ p, h1 {
   background-color: transparent;
 }
 
+.navbar-nav {
+  list-style-type: none;
+}
+
 /*http://bootsnipp.com/snippets/ZkpRl*/
 .navbar-nav.navbar-right .btn {
   position: relative; z-index: 2;
