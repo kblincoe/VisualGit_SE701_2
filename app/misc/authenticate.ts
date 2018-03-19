@@ -1,6 +1,4 @@
 let github = require("octonode");
-let username;
-let password;
 let aid, atoken;
 let client;
 let avaterImg;
@@ -18,9 +16,11 @@ function signOut() {
 }
 
 function signInHead(callback) {
-  username = document.getElementById("Email1").value;
-  password = document.getElementById("Password1").value;
-  console.log(username + '      ' + password);
+  setCredentials(document.getElementById("Email1").value, 
+                 document.getElementById("password").value);
+  
+  console.log('user has logged in successfully');
+  
   getUserInfo(callback);
   
   document.getElementById("Email1").value = "";
@@ -28,18 +28,25 @@ function signInHead(callback) {
 }
 
 function signInPage(callback) {
-  username = document.getElementById("username").value;
-  password = document.getElementById("password").value;
+  setCredentials(document.getElementById("username").value, 
+                 document.getElementById("password").value);
+  
+  console.log('user has logged in successfully');
+  
   getUserInfo(callback);
 }
 
-function getUserInfo(callback) {
+function setCredentials(username, password){
   cred = Git.Cred.userpassPlaintextNew(username, password);
-
+  
   client = github.client({
     username: username,
     password: password
   });
+}
+
+function getUserInfo(callback) {
+
   var ghme = client.me();
   ghme.info(function(err, data, head) {
     if (err) {
@@ -69,6 +76,8 @@ function getUserInfo(callback) {
       for (let i = 0; i < data.length; i++) {
         let rep = Object.values(data)[i];
         console.log(rep['html_url']);
+        let splitText = rep['html_url'].split(/\.|:|\//);
+        rep['name'] = splitText[splitText.length-2] + "/" + splitText[splitText.length-1];
         displayBranch(rep['name'], "repo-dropdown", "selectRepo(this)");
         repoList[rep['name']] = rep['html_url'];
       }
@@ -96,7 +105,8 @@ function getUserInfo(callback) {
 function selectRepo(ele) {
   url = repoList[ele.innerHTML];
   let butt = document.getElementById("cloneButton");
-  butt.innerHTML = 'Clone ' + ele.innerHTML;
+  let splitText = ele.innerHTML.split(/\.|:|\//);
+  butt.innerHTML = 'Clone ' + splitText[splitText.length-1];
   butt.setAttribute('class', 'btn btn-primary');
   console.log(url + 'JJJJJJJJ' + ele.innerHTML);
 }

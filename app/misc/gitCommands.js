@@ -5,4 +5,6 @@ function addCommand(command) {
     gitCommand.innerHTML = command;
     var footer = document.getElementById("footer");
     footer.appendChild(gitCommand);
+    footer.scrollTop = footer.scrollHeight;
+    // console.log(command);
 }

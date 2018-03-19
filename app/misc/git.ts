@@ -1,6 +1,5 @@
 import * as nodegit from "git";
-import NodeGit, { Status } from "nodegit";
-
+import NodeGit, { Status, Repository, StatusFile } from "nodegit";
 let opn = require('opn');
 let $ = require("jquery");
 let Git = require("nodegit");
@@ -488,7 +487,7 @@ function revertCommit(name: string, commitId: string) {
   .then(function(repo) {
     repos = repo;
     console.log(1.0);
-    
+
     if (commitId) {
       addCommand("git revert " + commitId);
       return Git.Commit.lookup(repos, commitId);
@@ -595,12 +594,15 @@ function displayModifiedFiles() {
         let checkbox = document.createElement("input");
         checkbox.type = "checkbox";
         checkbox.className = "checkbox";
-        /*
-         * When checkbox is clicked, fileElement.showOrHideDiffPanel is called,
-         * so checkbox.showOrHideDiffPanel is called to nullify the previous call.
-         */
-        checkbox.onclick = showOrHideDiffPanel;
         fileElement.appendChild(checkbox);
+
+        checkbox.onclick = function(this) {
+          showOrHideDiffPanel();
+          console.debug(this);
+          if (this.checked == false) {
+            clearSelectAllCheckbox();
+          }
+        }
 
         document.getElementById("files-changed").appendChild(fileElement);
 
@@ -693,4 +695,48 @@ function displayModifiedFiles() {
   function(err) {
     console.log("waiting for repo to be initialised");
   });
+}
+
+function cleanCurrentRepo() {
+  Git.Repository.open(repoFullPath)
+    .then(cleanRepo)
+    .then(function(repository: Repository) {
+      addCommand('git clean -f');
+      refreshAll(repository);
+      displayModifiedFiles();
+    });
+}
+
+function cleanRepo(repository: Repository) {
+  repository.getStatus()
+    .then(function(arrayStatusFile: StatusFile[]) {
+      removeUntrackedFiles(arrayStatusFile);
+    });
+
+  return repository;
+}
+
+function removeUntrackedFiles(arrayStatusFile: StatusFile[]) {
+  let filesToClean: String[] = [];
+
+  arrayStatusFile.forEach(function(statusFile: StatusFile) {
+
+    // Files marked as new are untracked, hence should be removed
+    // Files removed with fs as nodegit does not have implementation of git clean
+    if (statusFile.isNew()) {
+      filesToClean.push(<string>statusFile.path());
+      let filePath: string = <string>statusFile.path()
+
+      removeFileFromRepo(statusFile);
+    }
+
+  });
+}
+
+function removeFileFromRepo(statusFile: StatusFile) {
+  fs.unlink(repoFullPath + '\\' + statusFile.path(), function (err) {
+    if (err) {
+      addCommand('git clean failed: ' + err);
+    }
+  }); 
 }

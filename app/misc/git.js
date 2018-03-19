@@ -518,8 +518,14 @@ function displayModifiedFiles() {
                 var checkbox = document.createElement("input");
                 checkbox.type = "checkbox";
                 checkbox.className = "checkbox";
-                checkbox.onclick = showOrHideDiffPanel;
                 fileElement.appendChild(checkbox);
+                checkbox.onclick = function () {
+                    showOrHideDiffPanel();
+                    console.debug(this);
+                    if (this.checked == false) {
+                        clearSelectAllCheckbox();
+                    }
+                };
                 document.getElementById("files-changed").appendChild(fileElement);
                 fileElement.onclick = showOrHideDiffPanel;
             }
@@ -601,5 +607,38 @@ function displayModifiedFiles() {
         });
     }, function (err) {
         console.log("waiting for repo to be initialised");
+    });
+}
+function cleanCurrentRepo() {
+    Git.Repository.open(repoFullPath)
+        .then(cleanRepo)
+        .then(function (repository) {
+        addCommand('git clean -f');
+        refreshAll(repository);
+        displayModifiedFiles();
+    });
+}
+function cleanRepo(repository) {
+    repository.getStatus()
+        .then(function (arrayStatusFile) {
+        removeUntrackedFiles(arrayStatusFile);
+    });
+    return repository;
+}
+function removeUntrackedFiles(arrayStatusFile) {
+    var filesToClean = [];
+    arrayStatusFile.forEach(function (statusFile) {
+        if (statusFile.isNew()) {
+            filesToClean.push(statusFile.path());
+            var filePath = statusFile.path();
+            removeFileFromRepo(statusFile);
+        }
+    });
+}
+function removeFileFromRepo(statusFile) {
+    fs.unlink(repoFullPath + '\\' + statusFile.path(), function (err) {
+        if (err) {
+            addCommand('git clean failed: ' + err);
+        }
     });
 }
