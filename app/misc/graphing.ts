@@ -23,11 +23,13 @@ let avatarUrls = {};
 let branchIds = {};
 
 function processGraph(commits: nodegit.Commit[]) {
-  commitHistory = [];
-  numOfCommits = commits.length;
-  sortCommits(commits);
-  makeBranchColor();
-  populateCommits();
+    toggleLoadingVisibility();
+    updateLoadingStatus('sortCommits');
+    commitHistory = [];
+    numOfCommits = commits.length;
+    setTimeout(sortCommits(commits), 300);
+    setTimeout(makeBranchColor, 350);
+    setTimeout(populateCommits, 400);
 }
 
 function sortCommits(commits) {
@@ -57,6 +59,7 @@ function sortCommits(commits) {
       }
     }
   }
+  updateLoadingStatus('makeBranchColor');
 }
 
 function populateCommits() {
@@ -148,6 +151,7 @@ function populateCommits() {
   sortBasicGraph();
 
   commitList = commitList.sort(timeCompare);
+  toggleLoadingVisibility();
   reCenter();
 }
 
@@ -271,6 +275,7 @@ function makeBranchColor() {
       }
     }
   }
+  updateLoadingStatus('populateCommits');
 }
 
 function makeBasicNode(c, column: number) {
@@ -526,4 +531,30 @@ function reCenter() {
   };
 
   network.focus(commitList[commitList.length - 1]["id"], moveOptions);
+}
+
+function updateLoadingStatus(status) {
+    var loadingScreen = document.getElementById('loading-screen');
+    var loadingScreenText = document.getElementById('loading-text');
+
+    switch(status) {
+        case 'sortCommits':
+          loadingScreenText.innerHTML = 'currently sorting commits...';
+          break;
+        case 'makeBranchColor':
+          loadingScreenText.innerHTML = 'currently sorting branch colors...';
+          break;
+        case 'populateCommits':
+          loadingScreenText.innerHTML ='populating commits...';
+          break;
+    }
+}
+
+function toggleLoadingVisibility() {
+    var loadingScreen = $('#loading-screen');
+    if (loadingScreen.hasClass('notLoading')) {
+        loadingScreen.removeClass('notLoading').addClass('loading');    
+    } else {
+        loadingScreen.removeClass('loading').addClass('notLoading');
+    }
 }

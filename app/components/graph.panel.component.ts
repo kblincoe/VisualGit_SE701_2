@@ -4,6 +4,13 @@ import { Component } from "@angular/core";
   selector: "graph-panel",
   template: `
   <div class="graph-panel" id="graph-panel">
+    <div class="notLoading" id="loading-screen">
+     <div id="loading-text">
+     </div>
+     <svg class="spinner" viewBox="0 0 66 66">
+        <circle class="circleLoader" fill="none" strokeWidth="6" strokeLinecap="round" cx="33" cy="33" r="30" />
+      </svg>
+    </div>
     <div class="network" id="my-network">
     </div>
     <ul class="dropdown-menu" role="menu" id="branchOptions">

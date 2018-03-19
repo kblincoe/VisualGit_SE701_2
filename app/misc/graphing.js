@@ -1,4 +1,5 @@
 "use strict";
+//exports.__esModule = true;
 var vis = require("vis");
 var github1 = require("octonode");
 var nodeId = 1;
@@ -21,11 +22,13 @@ var githubUsername = require('github-username');
 var avatarUrls = {};
 var branchIds = {};
 function processGraph(commits) {
+    toggleLoadingVisibility();
+    updateLoadingStatus('sortCommits');
     commitHistory = [];
     numOfCommits = commits.length;
-    sortCommits(commits);
-    makeBranchColor();
-    populateCommits();
+    setTimeout(sortCommits(commits), 300);
+    setTimeout(makeBranchColor, 350);
+    setTimeout(populateCommits, 400);
 }
 function sortCommits(commits) {
     while (commits.length > 0) {
@@ -56,6 +59,7 @@ function sortCommits(commits) {
             }
         }
     }
+    updateLoadingStatus('makeBranchColor');
 }
 function populateCommits() {
     // reset variables for idempotency, shouldn't be needed when a class is created instead
@@ -143,6 +147,7 @@ function populateCommits() {
     }
     sortBasicGraph();
     commitList = commitList.sort(timeCompare);
+    toggleLoadingVisibility();
     reCenter();
 }
 function timeCompare(a, b) {
@@ -259,6 +264,7 @@ function makeBranchColor() {
             }
         }
     }
+    updateLoadingStatus('populateCommits');
 }
 function makeBasicNode(c, column) {
     var reference;
@@ -490,4 +496,28 @@ function reCenter() {
         }
     };
     network.focus(commitList[commitList.length - 1]["id"], moveOptions);
+}
+function updateLoadingStatus(status) {
+    var loadingScreen = document.getElementById('loading-screen');
+    var loadingScreenText = document.getElementById('loading-text');
+    switch (status) {
+        case 'sortCommits':
+            loadingScreenText.innerHTML = 'currently sorting commits...';
+            break;
+        case 'makeBranchColor':
+            loadingScreenText.innerHTML = 'currently sorting branch colors...';
+            break;
+        case 'populateCommits':
+            loadingScreenText.innerHTML = 'populating commits...';
+            break;
+    }
+}
+function toggleLoadingVisibility() {
+    var loadingScreen = $('#loading-screen');
+    if (loadingScreen.hasClass('notLoading')) {
+        loadingScreen.removeClass('notLoading').addClass('loading');
+    }
+    else {
+        loadingScreen.removeClass('loading').addClass('notLoading');
+    }
 }
