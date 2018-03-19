@@ -10,6 +10,7 @@ var url;
 function signOut() {
     warnIfCommitsNotOnRemote();
     switchToAuthenticatePanel();
+    clearCredentials();
     var doc = document.getElementById("avatar");
     doc.innerHTML = 'Sign in';
 }
@@ -45,7 +46,6 @@ function autoFillPassword(callback) {
             var machineId_1 = require("node-machine-id");
             var uidSalt = saltedPassword.substring(pw.length, saltedPassword.length);
             var uidTime = saltedTime.substring(lastLogin.length, saltedTime.length);
-            //login details are deleted it does not belong to the original computer the details were generated for or if login details is older than 7 days
             if ((machineId_1.machineIdSync() == uidSalt) && (uidSalt == uidTime) && ((new Date).getTime() - lastLogin < 604800)) {
                 document.getElementById("username").value = obj.loginInfo[0]["username"];
                 document.getElementById("password").value = pw;
@@ -85,6 +85,10 @@ function setCredentials(username, password) {
         username: username,
         password: password
     });
+}
+function clearCredentials() {
+    cred = undefined;
+    client = undefined;
 }
 function getUserInfo(callback) {
     var ghme = client.me();
@@ -135,7 +139,7 @@ function cloneRepo() {
     var splitText = url.split(/\.|:|\//);
     var local;
     if (splitText.length >= 2) {
-        local = splitText[splitText.length - 2];
+        local = splitText[splitText.length - 1];
     }
     downloadFunc(url, local);
     url = null;
