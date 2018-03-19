@@ -22,6 +22,10 @@ import { Component } from "@angular/core";
       <button class="commit-button" id="commit-button">Commit</button>
     </div>
 
+    <div class="clean-panel" id="clean-panel">
+      <button class="clean-button" id="clean-button">Clean</button>
+    </div>
+
   </div>
   `
 })
