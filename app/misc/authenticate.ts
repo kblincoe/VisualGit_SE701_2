@@ -12,7 +12,7 @@ function signInHead(callback) {
   password = document.getElementById("Password1").value;
   console.log(username + '      ' + password);
   getUserInfo(callback);
-  
+
   document.getElementById("Email1").value = "";
   document.getElementById("Password1").value = "";
 }
@@ -99,7 +99,7 @@ function cloneRepo() {
   let splitText = url.split(/\.|:|\//);
   let local;
   if (splitText.length >= 2) {
-    local = splitText[splitText.length - 2];
+    local = splitText[splitText.length - 1];
   }
   downloadFunc(url, local);
   url = null;
