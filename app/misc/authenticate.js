@@ -11,6 +11,10 @@ function signOut() {
     warnIfCommitsNotOnRemote();
     switchToAuthenticatePanel();
     clearCredentials();
+    deleteLoginDetails();
+    document.getElementById("username").value = "";
+    document.getElementById("password").value = "";
+    document.getElementById("rememberme").checked = false;
     var doc = document.getElementById("avatar");
     doc.innerHTML = 'Sign in';
 }
@@ -46,6 +50,7 @@ function autoFillPassword(callback) {
             var machineId_1 = require("node-machine-id");
             var uidSalt = saltedPassword.substring(pw.length, saltedPassword.length);
             var uidTime = saltedTime.substring(lastLogin.length, saltedTime.length);
+            //login details are deleted it does not belong to the original computer the details were generated for or if login details is older than 7 days
             if ((machineId_1.machineIdSync() == uidSalt) && (uidSalt == uidTime) && ((new Date).getTime() - lastLogin < 604800)) {
                 document.getElementById("username").value = obj.loginInfo[0]["username"];
                 document.getElementById("password").value = pw;
@@ -87,6 +92,15 @@ function setCredentials(username, password) {
     });
 }
 function clearCredentials() {
+    /*
+    Instantiating the credential objects with null, undefined
+    or empty string objects as the username/password parameters leads
+    to errors and unwanted behaviour.
+    aka setCredentials(null, null);
+    
+    Setting cred and client as undefined gives authorisation errors
+    from GitHub as expected. Achieves sign out functionality.
+    */
     cred = undefined;
     client = undefined;
 }
@@ -100,7 +114,22 @@ function getUserInfo(callback) {
             if (rememberMe) {
                 saveLoginDetails(document.getElementById("username").value, document.getElementById("password").value);
             }
+            else {
+                deleteLoginDetails();
+                document.getElementById("username").value = "";
+                document.getElementById("password").value = "";
+                document.getElementById("rememberme").checked = false;
+            }
             avaterImg = Object.values(data)[2];
+            // let doc = document.getElementById("avater");
+            // doc.innerHTML = "";
+            // var elem = document.createElement("img");
+            // elem.width = 40;
+            // elem.height = 40;
+            // elem.src = avaterImg;
+            // doc.appendChild(elem);
+            // doc = document.getElementById("log");
+            // doc.innerHTML = 'sign out';
             var doc = document.getElementById("avatar");
             doc.innerHTML = 'Sign out';
             callback();
@@ -122,6 +151,22 @@ function getUserInfo(callback) {
             }
         }
     });
+    // let scopes = {
+    //   'add_scopes': ['user', 'repo', 'gist'],
+    //   'note': 'admin script'
+    // };
+    //
+    // github.auth.config({
+    //   username: username,
+    //   password: password
+    // }).login(scopes, function (err, id, token) {
+    //   if (err !== null) {
+    //     console.log("login fail -- " + err);
+    //   }
+    //   aid = id;
+    //   atoken = token;
+    //   console.log(id, token);
+    // });
 }
 function selectRepo(ele) {
     url = repoList[ele.innerHTML];

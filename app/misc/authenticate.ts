@@ -14,6 +14,10 @@ function signOut() {
   switchToAuthenticatePanel();
 
   clearCredentials();
+  deleteLoginDetails();
+  document.getElementById("username").value = "";
+  document.getElementById("password").value = "";
+  document.getElementById("rememberme").checked = false;
 
   let doc = document.getElementById("avatar");
   doc.innerHTML = 'Sign in';
@@ -136,6 +140,11 @@ function getUserInfo(callback) {
     } else {
         if (rememberMe) {
           saveLoginDetails(document.getElementById("username").value, document.getElementById("password").value);
+        } else {
+          deleteLoginDetails();
+          document.getElementById("username").value = "";
+          document.getElementById("password").value = "";
+          document.getElementById("rememberme").checked = false;
         }
 
       avaterImg = Object.values(data)[2]
