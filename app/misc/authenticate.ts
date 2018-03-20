@@ -22,7 +22,7 @@ function signOut() {
 
 function signInHead(callback) {
   setCredentials(document.getElementById("Email1").value, 
-                 document.getElementById("password").value);
+                 document.getElementById("Password1").value);
   
   console.log('user has logged in successfully');
   
