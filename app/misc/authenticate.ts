@@ -13,6 +13,8 @@ function signOut() {
   warnIfCommitsNotOnRemote();
   switchToAuthenticatePanel();
 
+  clearCredentials();
+
   let doc = document.getElementById("avatar");
   doc.innerHTML = 'Sign in';
 
@@ -108,6 +110,21 @@ function setCredentials(username, password) {
     username: username,
     password: password
   });
+}
+
+function clearCredentials() {
+  /* 
+  Instantiating the credential objects with null, undefined 
+  or empty string objects as the username/password parameters leads 
+  to errors and unwanted behaviour.
+  aka setCredentials(null, null);
+  
+  Setting cred and client as undefined gives authorisation errors
+  from GitHub as expected. Achieves sign out functionality.
+  */
+  cred = undefined;
+
+  client = undefined;
 }
 
 function getUserInfo(callback) {
