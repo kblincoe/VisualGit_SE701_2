@@ -26,7 +26,7 @@ import { openForgotPasswordPage } from "../misc/forgotPassword";
         </label>
         <br><br>
         <div class="input-group" style="width:280px;">
-          <input id="username" type="text" class="form-control" placeholder="username" aria-describedby="basic-addon1">
+          <input id="username" type="text" class="form-control" placeholder="Username or Email" aria-describedby="basic-addon1">
         </div>
         <br>
         <div class="input-group" style="width:280px;">
