@@ -42,13 +42,12 @@ git clone git@github.com:ElliotWhiley/VisualGit.git
 ````
 git clone https://github.com/ElliotWhiley/VisualGit.git
 ````
-then...
 
-````
-cd VisualGit
-npm install
-npm start
-````
+### Installing the app
+Run [Install.sh](Install.sh)
+
+### Running the app
+Run [Run.sh](Run.sh)
 
 ### ssh-agent
 As VisualGit utilises SSH for user authentication, ensure you [generate a SSH key for your GitHub account](https://help.github.com/articles/generating-a-new-ssh-key-and-adding-it-to-the-ssh-agent/). If you are not running on a Mac, you will also need to set up and run an ssh-agent to access your SSH key at run time without providing your credentials each time.
@@ -57,6 +56,9 @@ As VisualGit utilises SSH for user authentication, ensure you [generate a SSH ke
 
 ### TypeScript
 [TypeScript](https://www.typescriptlang.org/) is a statically-typed superset of JavaScript that compiles into JavaScript. Most of our source files are written in TypeScript (.ts files), therefore you will need to run a TypeScript compiler to compile your source code to JavaScript (.js files) as you make changes, e.g. [typescript-compiler](https://www.npmjs.com/package/typescript-compiler) for Node.
+
+### Compiling TypeScript
+Run [Compile.sh](Compile.sh)
 
 ### Sass
 [Sass](http://sass-lang.com/) (Syntactically Awesome Style Sheets) is a CSS preprocessor with some handy extra features. All of our Style Sheets are written in Sass (.scss files), which compile into CSS (.css files). Therefore, you will need to a run a Sass-compiler to compile your .scss files into .css files as you make changes, e.g. [node-sass](https://www.npmjs.com/package/node-sass) for Node.
