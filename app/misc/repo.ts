@@ -18,6 +18,10 @@ function downloadRepository() {
 }
 
 function downloadFunc(cloneURL, localPath) {
+  if (cloneURL == "") {
+    displayModal("Please input a valid URL");
+    return;
+  }
   let fullLocalPath = require("path").join(__dirname, localPath);
   let options = {};
 
