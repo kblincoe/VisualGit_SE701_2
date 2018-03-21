@@ -282,7 +282,7 @@ function makeBasicNode(c, column) {
             id = basicList[i]['id'];
             basicList[i]['count'] += 1;
             count = basicList[i]['count'];
-            bsNodes.update({ id: i + 1, title: "Number of Commits: " + count });
+            bsNodes.update({ id: i + 1, title: "Author: " + email + "<br>" + "Number of Commits: " + count });
             basicList[i]['sha'].push(c.toString());
             basicList[i]['parents'] = basicList[i]['parents'].concat(c.parents());
             break;
@@ -290,7 +290,7 @@ function makeBasicNode(c, column) {
     }
     if (flag) {
         id = basicNodeId++;
-        var title = "Number of Commits: " + count;
+        var title = "Author: " + email + "<br>" + "Number of Commits: " + count;
         bsNodes.add({
             id: id,
             commitId: c.toString(),
