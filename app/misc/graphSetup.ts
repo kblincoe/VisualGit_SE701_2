@@ -1,7 +1,7 @@
 let vis = require("vis");
 let $ = require("jquery");
 let options, bsNodes, bsEdges, abNodes, abEdges, nodes, edges, network;
-let startP, secP = null, fromNode = null, toNode;
+let startP, endP, secP = null, fromNode = null, toNode;
 
 
 function drawGraph() {
@@ -205,7 +205,8 @@ function drawGraph() {
 
   network.on('dragEnd', function(cb) {
     fromNode = cb.nodes[0];
-    network.moveNode(fromNode, startP.x, startP.y);
+    endP = cb.pointer.canvas;
+    network.moveNode(fromNode,endP.x, endP.y);
     secP = cb.pointer.DOM;
   }, false);
 
