@@ -333,6 +333,11 @@ function updateModalText(text) {
     document.getElementById("modal-text-box").innerHTML = text;
     $('#modal').modal('show');
 }
+
+function showWarning() {
+    document.getElementById("modal-warning-text").innerHTML = "You are about to lose your changes!<br>Are you sure you want to pull?";
+    $('#modal-warning').modal('show');
+  
 function checkModifiedFiles() {
     var filesHaveBeenModified = false;
     console.log('repoFullPath', repoFullPath);

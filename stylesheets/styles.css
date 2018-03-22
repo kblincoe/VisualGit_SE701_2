@@ -523,3 +523,11 @@ body .footer .git-command {
   0% { transform: rotate(0deg); }
   100% { transform: rotate(360deg); }
 }
+
+.modal-title-warning {
+  color : red;
+}
+
+.modal-footer .btn.btn-pull {
+  background-color : #4CAF50;
+}

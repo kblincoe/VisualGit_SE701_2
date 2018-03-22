@@ -362,6 +362,10 @@ function updateModalText(text) {
   $('#modal').modal('show');
 }
 
+function showWarning() {
+  document.getElementById("modal-warning-text").innerHTML = "You have uncommitted changes!<br>Are you sure you want to pull?";
+  $('#modal-warning').modal('show');
+}
 function checkModifiedFiles() {
     var filesHaveBeenModified = false;
     console.log('repoFullPath', repoFullPath);
@@ -390,3 +394,4 @@ function fileModified(file) {
         return false;
     }
 }
+
