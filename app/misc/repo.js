@@ -16,6 +16,10 @@ function downloadRepository() {
     downloadFunc(cloneURL, localPath);
 }
 function downloadFunc(cloneURL, localPath) {
+    if (cloneURL == "") {
+        displayModal("Please input a valid URL");
+        return;
+    }
     var fullLocalPath = require("path").join(__dirname, localPath);
     var options = {};
     displayModal("Cloning Repository...");
@@ -34,7 +38,7 @@ function downloadFunc(cloneURL, localPath) {
         .then(function (repository) {
         console.log("Repo successfully cloned");
         updateModalText("Clone Successful, repository saved under: " + fullLocalPath);
-        addCommand("git clone " + cloneURL + " " + localPath);
+        addCommand("git clone " + cloneURL);
         repoFullPath = fullLocalPath;
         repoLocalPath = localPath;
         refreshAll(repository);
@@ -45,6 +49,8 @@ function downloadFunc(cloneURL, localPath) {
 }
 function openRepository() {
     var localPath = document.getElementById("repoOpen").value;
+    // Windows does not have a case-sensitive filesystem,
+    // true-case-path package is used here to extract the true-case filepath for the repo being opened
     var path = require("path");
     var fullLocalPath = path.join(__dirname, localPath);
     var trueCasePathSync = require('true-case-path');
@@ -219,65 +225,82 @@ function displayBranch(name, id, onclick) {
     ul.appendChild(li);
 }
 function checkoutLocalBranch(element) {
-    var bn;
-    console.log(typeof element + "UUUUUUUUU");
-    if (typeof element === "string") {
-        bn = element;
-    }
-    else {
-        bn = element.innerHTML;
-    }
-    console.log(bn + ">>>>>>>>");
-    Git.Repository.open(repoFullPath)
-        .then(function (repo) {
-        addCommand("git checkout " + bn);
-        repo.checkoutBranch("refs/heads/" + bn)
-            .then(function () {
-            refreshAll(repo);
-        }, function (err) {
-            console.log(err + "<<<<<<<");
+    var filesModified = false;
+    checkModifiedFiles().then(function (res) {
+        filesModified = res;
+    })
+        .then(function () {
+        if (filesModified) {
+            return displayModal('Your local changes would be overwritten by checkout Please commit your changes or stash them before you switch branches');
+        }
+        var bn;
+        console.log(typeof element + "UUUUUUUUU");
+        if (typeof element === "string") {
+            bn = element;
+        }
+        else {
+            bn = element.innerHTML;
+        }
+        console.log(bn + ">>>>>>>>");
+        Git.Repository.open(repoFullPath)
+            .then(function (repo) {
+            addCommand("git checkout " + bn);
+            repo.checkoutBranch("refs/heads/" + bn)
+                .then(function () {
+                refreshAll(repo);
+            }, function (err) {
+                console.log(err + "<<<<<<<");
+            });
         });
     });
 }
 function checkoutRemoteBranch(element) {
-    var bn;
-    if (typeof element === "string") {
-        bn = element;
-    }
-    else {
-        bn = element.innerHTML;
-    }
-    console.log("1.0  " + bn);
-    var repos;
-    Git.Repository.open(repoFullPath)
-        .then(function (repo) {
-        repos = repo;
-        addCommand("git fetch");
-        addCommand("git checkout -b " + bn);
-        var cid = remoteName[bn];
-        console.log("2.0  " + cid);
-        return Git.Commit.lookup(repo, cid);
-    })
-        .then(function (commit) {
-        console.log("3.0");
-        return Git.Branch.create(repos, bn, commit, 0);
-    })
-        .then(function (code) {
-        console.log(bn + "PPPPPPP");
-        repos.mergeBranches(bn, "origin/" + bn)
-            .then(function () {
-            refreshAll(repos);
-            console.log("Pull successful");
+    var filesModified = false;
+    checkModifiedFiles().then(function (res) {
+        filesModified = res;
+    }).then(function () {
+        if (filesModified) {
+            return displayModal('Your local changes would be overwritten by checkout Please commit your changes or stash them before you switch branches');
+        }
+        var bn;
+        if (typeof element === "string") {
+            bn = element;
+        }
+        else {
+            bn = element.innerHTML;
+        }
+        console.log("1.0  " + bn);
+        var repos;
+        Git.Repository.open(repoFullPath)
+            .then(function (repo) {
+            repos = repo;
+            addCommand("git fetch");
+            addCommand("git checkout -b " + bn);
+            var cid = remoteName[bn];
+            console.log("2.0  " + cid);
+            return Git.Commit.lookup(repo, cid);
+        })
+            .then(function (commit) {
+            console.log("3.0");
+            return Git.Branch.create(repos, bn, commit, 0);
+        })
+            .then(function (code) {
+            console.log(bn + "PPPPPPP");
+            repos.mergeBranches(bn, "origin/" + bn)
+                .then(function () {
+                refreshAll(repos);
+                console.log("Pull successful");
+            });
+        }, function (err) {
+            console.log(err);
         });
-    }, function (err) {
-        console.log(err);
     });
 }
 function updateLocalPath() {
     var text = document.getElementById("repoClone").value;
     var splitText = text.split(/\.|:|\//);
     if (splitText.length >= 2) {
-        document.getElementById("repoSave").value = splitText[splitText.length - 2];
+        document.getElementById("repoSave").value = splitText[splitText.length - 1];
     }
 }
 // function initModal() {
@@ -310,7 +333,39 @@ function updateModalText(text) {
     document.getElementById("modal-text-box").innerHTML = text;
     $('#modal').modal('show');
 }
+
 function showWarning() {
     document.getElementById("modal-warning-text").innerHTML = "You are about to lose your changes!<br>Are you sure you want to pull?";
     $('#modal-warning').modal('show');
+  
+function checkModifiedFiles() {
+    var filesHaveBeenModified = false;
+    console.log('repoFullPath', repoFullPath);
+    return Git.Repository.open(repoFullPath)
+        .then(function (repo) {
+        return repo.getStatus().then(function (statuses) {
+            filesHaveBeenModified = statuses.some(fileModified);
+            return filesHaveBeenModified;
+        });
+    });
+}
+function fileModified(file) {
+    if (file.isNew()) {
+        return true;
+    }
+    else if (file.isModified()) {
+        return true;
+    }
+    else if (file.isDeleted()) {
+        return true;
+    }
+    else if (file.isTypechange()) {
+        return true;
+    }
+    else if (file.isRenamed()) {
+        return true;
+    }
+    else {
+        return false;
+    }
 }

@@ -13,6 +13,12 @@ function signOut() {
   warnIfCommitsNotOnRemote();
   switchToAuthenticatePanel();
 
+  clearCredentials();
+  deleteLoginDetails();
+  document.getElementById("username").value = "";
+  document.getElementById("password").value = "";
+  document.getElementById("rememberme").checked = false;
+
   let doc = document.getElementById("avatar");
   doc.innerHTML = 'Sign in';
 
@@ -20,7 +26,7 @@ function signOut() {
 
 function signInHead(callback) {
   setCredentials(document.getElementById("Email1").value, 
-                 document.getElementById("password").value);
+                 document.getElementById("Password1").value);
   
   console.log('user has logged in successfully');
   
@@ -110,6 +116,21 @@ function setCredentials(username, password) {
   });
 }
 
+function clearCredentials() {
+  /* 
+  Instantiating the credential objects with null, undefined 
+  or empty string objects as the username/password parameters leads 
+  to errors and unwanted behaviour.
+  aka setCredentials(null, null);
+  
+  Setting cred and client as undefined gives authorisation errors
+  from GitHub as expected. Achieves sign out functionality.
+  */
+  cred = undefined;
+
+  client = undefined;
+}
+
 function getUserInfo(callback) {
 
   var ghme = client.me();
@@ -119,6 +140,11 @@ function getUserInfo(callback) {
     } else {
         if (rememberMe) {
           saveLoginDetails(document.getElementById("username").value, document.getElementById("password").value);
+        } else {
+          deleteLoginDetails();
+          document.getElementById("username").value = "";
+          document.getElementById("password").value = "";
+          document.getElementById("rememberme").checked = false;
         }
 
       avaterImg = Object.values(data)[2]

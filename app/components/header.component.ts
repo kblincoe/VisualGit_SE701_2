@@ -55,7 +55,7 @@ import { openForgotPasswordPage } from "../misc/forgotPassword";
             <form class="navbar-form navbar-right form-inline" role="form">
               <div class="form-group">
                 <label class="sr-only" for="Email">User name</label>
-                <input type="text" class="form-control" id="Email1" placeholder="Email" autofocus required />
+                <input type="text" class="form-control" id="Email1" placeholder="Email/Username" autofocus required />
               </div>
               <div class="form-group">
                 <label class="sr-only" for="Password">Password</label>
@@ -188,19 +188,19 @@ export class HeaderComponent   {
   }
 
   clickSignOutButton(): void {
-     
+
     // Can't have this here - nullifies the following collapse, has to be in else clause
-    // toggleSignPanel(); 
-  
+    // toggleSignPanel();
+
     if (document.getElementById('avatar').innerHTML == "Sign out") {
-  
+
       collpaseSignPanel();
       signOut();
-    
+
     } else {
 
       toggleSignPanel();
-  
+
     }
   }
 }

@@ -1,7 +1,7 @@
 var vis = require("vis");
 var $ = require("jquery");
 var options, bsNodes, bsEdges, abNodes, abEdges, nodes, edges, network;
-var startP, secP = null, fromNode = null, toNode;
+var startP, endP, secP = null, fromNode = null, toNode;
 function drawGraph() {
     bsNodes = new vis.DataSet([]);
     bsEdges = new vis.DataSet([]);
@@ -179,7 +179,8 @@ function drawGraph() {
     });
     network.on('dragEnd', function (cb) {
         fromNode = cb.nodes[0];
-        network.moveNode(fromNode, startP.x, startP.y);
+        endP = cb.pointer.canvas;
+        network.moveNode(fromNode, endP.x, endP.y);
         secP = cb.pointer.DOM;
     }, false);
     network.on("animationFinished", function () {

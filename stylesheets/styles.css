@@ -23,6 +23,10 @@ p, h1 {
   background-color: transparent;
 }
 
+.navbar-nav {
+  list-style-type: none;
+}
+
 /*http://bootsnipp.com/snippets/ZkpRl*/
 .navbar-nav.navbar-right .btn {
   position: relative; z-index: 2;
@@ -519,6 +523,7 @@ body .footer .git-command {
   0% { transform: rotate(0deg); }
   100% { transform: rotate(360deg); }
 }
+
 .modal-title-warning {
   color : red;
 }
