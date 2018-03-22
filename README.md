@@ -83,6 +83,10 @@ This is used to allow users to see the different types of changes easily and onc
 ### Pushing & Pulling from remote
 The pulling and pushing currently works for changes which are made on master and origin/master by syncing these up. When the pull button is clicked, any changes on the remote repository will be added to the local repository and the graph will be updated. When pushing, the same process applies. The changes on master will be pushed to the remote repository.
 
+### Automatic compilation of typescript files
+If you want to automatically compile a specific typescript file when you make a change, simply run *tsc xxx.ts --watch*. Replace xxx with the desired file e.g. authenticate.ts. You should be able to see your changes once you have saved your ts file.
+
+Additionally, if you want your files to automatically compile, simply type *tsc -w* on the console or run the the file '*ContinuousCompile*'.
 
 # Contributing
 We are open to pull requests with new features or improvements.
