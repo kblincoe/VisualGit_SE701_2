@@ -105,6 +105,15 @@ function setCredentials(username, password) {
     });
 }
 function clearCredentials() {
+    /*
+    Instantiating the credential objects with null, undefined
+    or empty string objects as the username/password parameters leads
+    to errors and unwanted behaviour.
+    aka setCredentials(null, null);
+
+    Setting cred and client as undefined gives authorisation errors
+    from GitHub as expected. Achieves sign out functionality.
+    */
     cred = undefined;
     client = undefined;
 }
@@ -142,7 +151,7 @@ function getUserInfo(callback) {
                 console.log(rep['html_url']);
                 var splitText = rep['html_url'].split(/\.|:|\//);
                 rep['name'] = splitText[splitText.length - 2] + "/" + splitText[splitText.length - 1];
-                displayBranch(rep['name'], "repo-dropdown", "selectRepo(this)");
+                displayBranch(rep['name'], "repo-dropdown", "selectRepo(this)", "cloneRepo()");
                 repoList[rep['name']] = rep['html_url'];
             }
         }
