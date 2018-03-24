@@ -1,5 +1,6 @@
 import * as nodegit from "git";
 import NodeGit, { Status, Repository, StatusFile } from "nodegit";
+export = {}; // DO NOT REMOVE - OR GRAPHS WILL BREAK
 let opn = require('opn');
 let $ = require("jquery");
 let Git = require("nodegit");

@@ -1,5 +1,5 @@
 import * as nodegit from "git";
-
+export = {}; // DO NOT REMOVE - OR GRAPHS WILL BREAK
 let vis = require("vis");
 let github1 = require("octonode");
 let nodeId = 1;

@@ -4,16 +4,10 @@ function processAbstract(commits) {
     populateAbstract();
 }
 function populateAbstract() {
-    // reset variables for idempotency, shouldn't be needed when a class is created instead
     nodeId = 1;
     commitList = [];
     parentCount = {};
     columns = [];
-    // Sort
-    // commitHistory = commits.sort(function(a, b) {
-    //   return a.timeMs() - b.timeMs();
-    // });
-    // Plot the graph
     for (var i = 0; i < commitHistory.length; i++) {
         console.log(i + " / " + commitHistory.length);
         var parents = commitHistory[i].parents();
@@ -28,7 +22,6 @@ function populateAbstract() {
             }
         }
         if (parents.length === 0) {
-            // no parents means first commit so assign the first column
             columns[0] = true;
             nodeColumn = 0;
         }
@@ -37,7 +30,6 @@ function populateAbstract() {
             var parentId = getNodeId(parent_2.toString());
             var parentColumn = commitList[parentId - 1]["column"];
             if (parentCount[parent_2] === 1) {
-                // first child
                 nodeColumn = parentColumn;
             }
             else {
@@ -65,7 +57,6 @@ function populateAbstract() {
                 columns[index] = false;
             }
             if (parentCount[desiredParent] === 1) {
-                // first child
                 nodeColumn = desiredColumn;
             }
             else {
@@ -74,7 +65,6 @@ function populateAbstract() {
         }
         makeNode(commitHistory[i], nodeColumn);
     }
-    // Add edges
     for (var i = 0; i < commitHistory.length; i++) {
         addEdges(commitHistory[i]);
     }
@@ -110,7 +100,7 @@ function makeAbsNode(c, column, count) {
         physics: false,
         fixed: (id === 1),
         x: (column - 1) * spacingX,
-        y: (id - 1) * spacingY
+        y: (id - 1) * spacingY,
     });
     commitList.push({
         sha: c.sha(),
@@ -118,7 +108,7 @@ function makeAbsNode(c, column, count) {
         time: c.timeMs(),
         column: column,
         email: email,
-        reference: reference
+        reference: reference,
     });
 }
 function makeEdge(sha, parentSha) {
