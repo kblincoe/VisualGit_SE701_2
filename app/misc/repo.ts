@@ -13,17 +13,33 @@ let span;
 
 function downloadRepository() {
   let cloneURL = document.getElementById("repoClone").value;
-  let localPath = document.getElementById("repoSave").value;
-  downloadFunc(cloneURL, localPath);
+  let fullLocalPath = document.getElementById("repoSave").value;
+  downloadFunc(cloneURL, fullLocalPath, "downloadRepository");
 }
 
-function downloadFunc(cloneURL, localPath) {
+function downloadFunc(cloneURL, repoPath, callerFunction) {
+  let options = {};
+  let localPath;
+  let fullLocalPath;
+
   if (cloneURL == "") {
     displayModal("Please input a valid URL");
     return;
   }
-  let fullLocalPath = require("path").join(__dirname, localPath);
-  let options = {};
+
+  if (callerFunction == "downloadRepository") {
+    let splitText = cloneURL.split(/\.|:|\//);
+    if (splitText.length >= 2) {
+        localPath = splitText[splitText.length - 2];
+    }
+    fullLocalPath = repoPath;
+  } else if (callerFunction == "cloneRepo") {
+    localPath = repoPath;
+    fullLocalPath = require("path").join(__dirname, localPath);
+  } else {
+    displayModal("Path not found");
+    return;
+  }
 
   displayModal("Cloning Repository...");
 
@@ -54,21 +70,24 @@ function downloadFunc(cloneURL, localPath) {
   });
 }
 
+function setRepoPath() {
+    document.getElementById("repoOpen").value = document.getElementById('openFolderExplorer').files[0].path;
+}
+
+function setSavePath() {
+  document.getElementById("repoSave").value = document.getElementById('saveFolderExplorer').files[0].path;
+}
+
 function openRepository() {
+  let fullLocalPath = document.getElementById('repoOpen').value;
+  let localPath;
 
-  let localPath = document.getElementById("repoOpen").value;
+  let splitText = fullLocalPath.split(/\.|:|\/|\\/);
+  if (splitText.length >= 2) {
+      localPath = splitText[splitText.length - 1];
+  }
 
-  // Windows does not have a case-sensitive filesystem,
-  // true-case-path package is used here to extract the true-case filepath for the repo being opened
-  const path = require("path");
-  let fullLocalPath = path.join(__dirname, localPath);
-
-  const trueCasePathSync = require('true-case-path');
-  fullLocalPath = trueCasePathSync(fullLocalPath);
-
-  localPath = fullLocalPath.split(path.sep).pop();
-
-  if (localPath.length <= 0) {
+  if (fullLocalPath.length <= 0) {
     updateModalText("Error opening repository. Location cannot be empty!");
     return;
   }
@@ -318,14 +337,6 @@ function checkoutRemoteBranch(element) {
             console.log(err);
         });
     });
-}
-
-function updateLocalPath() {
-  let text = document.getElementById("repoClone").value;
-  let splitText = text.split(/\.|:|\//);
-  if (splitText.length >= 2) {
-    document.getElementById("repoSave").value = splitText[splitText.length - 1];
-  }
 }
 
 // function initModal() {

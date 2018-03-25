@@ -151,7 +151,7 @@ function cloneRepo() {
     if (splitText.length >= 2) {
         local = splitText[splitText.length - 1];
     }
-    downloadFunc(url, local);
+    downloadFunc(url, local, "cloneRepo");
     url = null;
     $('#repo-modal').modal('hide');
 }
