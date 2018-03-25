@@ -16,7 +16,7 @@ import { Component } from "@angular/core";
             <p>URL to clone from</p>
           </div>
           <div class="right">
-          <input type="text" oninput="updateLocalPath()" name="repositoryRemote" size="50" id="repoClone" placeholder="https://github.com/user/repository.git"/>
+          <input type="text" name="repositoryRemote" size="50" id="repoClone" placeholder="https://github.com/user/repository.git"/>
           </div>
         </div>
 
@@ -25,7 +25,9 @@ import { Component } from "@angular/core";
             <p>File location to save to</p>
           </div>
           <div class="right">
-            <input type="text" name="repositoryLocal" size="50" id="repoSave"/>
+            <input type="text" name="repositoryLocal" size="50" id="repoSave" readonly/>
+            <input type="button" id="button-browse-save" value="Browse" onclick="document.getElementById('saveFolderExplorer').click()"/>
+            <input type="file" style="display:none;" name="saveFolderExplorer" id="saveFolderExplorer" webkitdirectory onchange="setSavePath()"/>
             <button class="button-clone" (click)="addRepository()">Clone</button>
           </div>
         </div>
@@ -40,7 +42,9 @@ import { Component } from "@angular/core";
             <p>Location of existing repository</p>
           </div>
           <div class="right">
-            <input type="text" name="repositoryLocal" size="50" id="repoOpen"/>
+            <input type="text" name="repositoryLocal" size="50" id="repoOpen" readonly/>
+            <input type="button" id="button-browse-open" value="Browse" onclick="document.getElementById('openFolderExplorer').click()"/>
+            <input type="file" style="display:none;" name="openFolderExplorer" id="openFolderExplorer" webkitdirectory onchange="setRepoPath()"/>
             <button class="button-open" (click)="openRepository()">Open</button>
           </div>
         </div>

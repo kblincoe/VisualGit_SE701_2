@@ -366,7 +366,7 @@ body {
       padding: 10px;
     }
 
-    .button-clone, .button-open {
+    #button-browse-open, #button-browse-save, .button-clone, .button-open {
       display: inline-block;
       height: 30px;
       border-radius: 10px;
@@ -376,10 +376,10 @@ body {
       margin-left: 10px;
       background-color: $teal;
       color: $white;
-      float: right;
+      float: none;
     }
 
-    .button-clone:hover, .button-open:hover {
+    #button-browse-open:hover, #button-browse-save:hover, .button-clone:hover, .button-open:hover {
       opacity: 0.8;
     }
 

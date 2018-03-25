@@ -389,7 +389,7 @@ body .add-repository-panel input {
   padding: 10px;
 }
 
-body .add-repository-panel .button-clone, body .add-repository-panel .button-open {
+body .add-repository-panel #button-browse-open, .add-repository-panel #button-browse-save, .add-repository-panel .button-clone, body .add-repository-panel .button-open {
   display: inline-block;
   height: 30px;
   border-radius: 10px;
@@ -399,10 +399,10 @@ body .add-repository-panel .button-clone, body .add-repository-panel .button-ope
   margin-left: 10px;
   background-color: #39c0ba;
   color: #fff;
-  float: right;
+  float: none;
 }
 
-body .add-repository-panel .button-clone:hover, body .add-repository-panel .button-open:hover {
+body .add-repository-panel #button-browse-open:hover, .add-repository-panel #button-browse-save:hover, .add-repository-panel .button-clone:hover, body .add-repository-panel .button-open:hover {
   opacity: 0.8;
 }
 
