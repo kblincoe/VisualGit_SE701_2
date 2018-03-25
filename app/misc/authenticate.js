@@ -7,6 +7,7 @@ var client;
 var avaterImg;
 var repoList = {};
 var url;
+var display_username;
 function signOut() {
     warnIfCommitsNotOnRemote();
     switchToAuthenticatePanel();
@@ -17,6 +18,7 @@ function signOut() {
     document.getElementById("rememberme").checked = false;
     var doc = document.getElementById("avatar");
     doc.innerHTML = 'Sign in';
+    display_username = "";
 }
 function signInHead(callback) {
     setCredentials(document.getElementById("Email1").value, document.getElementById("Password1").value);
@@ -30,6 +32,18 @@ function signInPage(callback) {
     console.log('user has logged in successfully');
     rememberMe = document.getElementById("rememberme").checked;
     getUserInfo(callback);
+}
+function setUsername() {
+    display_username = document.getElementById("username").value;
+    if (display_username.search("@") > 0) {
+        var githubUsername = require('github-username');
+        display_username = document.getElementById("username").value;
+        githubUsername(document.getElementById("username").value).then(function (username) {
+            display_username = username;
+        }, function (err) {
+            console.log(err);
+        });
+    }
 }
 function autoFillPassword(callback) {
     fs.stat("login.json", function (err, stats) {
@@ -110,9 +124,10 @@ function getUserInfo(callback) {
                 document.getElementById("password").value = "";
                 document.getElementById("rememberme").checked = false;
             }
+            setUsername();
             avaterImg = Object.values(data)[2];
             var doc = document.getElementById("avatar");
-            doc.innerHTML = 'Sign out';
+            doc.innerHTML = 'Sign out <b>' + display_username + '</b>';
             callback();
         }
     });
@@ -151,7 +166,7 @@ function cloneRepo() {
     if (splitText.length >= 2) {
         local = splitText[splitText.length - 1];
     }
-    downloadFunc(url, local);
+    downloadFunc(url, local, "cloneRepo");
     url = null;
     $('#repo-modal').modal('hide');
 }

@@ -7,6 +7,7 @@ let client;
 let avaterImg;
 let repoList = {};
 let url;
+let display_username;
 
 function signOut() {
 
@@ -21,7 +22,7 @@ function signOut() {
 
   let doc = document.getElementById("avatar");
   doc.innerHTML = 'Sign in';
-
+  display_username = "";
 }
 
 function signInHead(callback) {
@@ -29,7 +30,6 @@ function signInHead(callback) {
                  document.getElementById("Password1").value);
   
   console.log('user has logged in successfully');
-  
   getUserInfo(callback);
 
   document.getElementById("Email1").value = "";
@@ -39,10 +39,22 @@ function signInHead(callback) {
 function signInPage(callback) {
   setCredentials(document.getElementById("username").value, 
                 document.getElementById("password").value);
-
   console.log('user has logged in successfully');
   rememberMe = document.getElementById("rememberme").checked;
   getUserInfo(callback);
+}
+
+function setUsername(){
+  display_username = document.getElementById("username").value;
+  if (display_username.search("@") > 0){
+    let githubUsername = require('github-username');
+    display_username = document.getElementById("username").value;
+    githubUsername(document.getElementById("username").value).then(username => {
+      display_username = username;
+    }, err => {
+      console.log(err);
+    });
+  }
 }
 
 function autoFillPassword(callback){
@@ -146,7 +158,7 @@ function getUserInfo(callback) {
           document.getElementById("password").value = "";
           document.getElementById("rememberme").checked = false;
         }
-
+      setUsername();
       avaterImg = Object.values(data)[2]
       // let doc = document.getElementById("avater");
       // doc.innerHTML = "";
@@ -158,7 +170,7 @@ function getUserInfo(callback) {
       // doc = document.getElementById("log");
       // doc.innerHTML = 'sign out';
       let doc = document.getElementById("avatar");
-      doc.innerHTML = 'Sign out';
+      doc.innerHTML = 'Sign out <b>' + display_username + '</b>';
       callback();
     }
   });
@@ -216,7 +228,7 @@ function cloneRepo() {
   if (splitText.length >= 2) {
     local = splitText[splitText.length - 1];
   }
-  downloadFunc(url, local);
+  downloadFunc(url, local, "cloneRepo");
   url = null;
   $('#repo-modal').modal('hide');
 }
