@@ -60,7 +60,7 @@ function downloadFunc(cloneURL, repoPath, callerFunction) {
         refreshAll(repository);
     }, function (err) {
         updateModalText("Clone Failed - " + err);
-        console.log(err); // TODO show error on screen
+        console.log(err);
     });
 }
 function setRepoPath() {
@@ -94,7 +94,7 @@ function openRepository() {
         updateModalText("Repository successfully opened");
     }, function (err) {
         updateModalText("Opening Failed - " + err);
-        console.log(err); // TODO show error on screen
+        console.log(err);
     });
 }
 function addBranchestoNode(thisB) {
@@ -122,7 +122,7 @@ function refreshAll(repository) {
         console.log(branchParts + "OOOOOOOOOOO");
         branch = branchParts[branchParts.length - 1];
     }, function (err) {
-        console.log(err + "?????"); // TODO show error on screen
+        console.log(err + "?????");
     })
         .then(function () {
         return repository.getReferences(Git.Reference.TYPE.LISTALL);
@@ -131,11 +131,8 @@ function refreshAll(repository) {
         var count = 0;
         clearBranchElement();
         var _loop_1 = function (i) {
-            //console.log(branchList[i].name() + "!!!!");
             var bp = branchList[i].name().split("/");
             Git.Reference.nameToId(repository, branchList[i].name()).then(function (oid) {
-                // Use oid
-                //console.log(oid + "  TTTTTTTT");
                 if (branchList[i].isRemote()) {
                     remoteName[bp[bp.length - 1]] = oid;
                 }
@@ -189,7 +186,6 @@ function getAllBranches() {
                 displayBranch(bp[bp.length - 1], "branch-dropdown", "checkoutLocalBranch(this)");
             }
             Git.Reference.nameToId(repos, branchList[i]).then(function (oid) {
-                // Use oid
                 console.log(oid + "  TTTTTTTT");
             });
         }
@@ -316,29 +312,16 @@ function checkoutRemoteBranch(element) {
         });
     });
 }
-// function initModal() {
-//   modal = document.getElementById("modal");
-//   btn = document.getElementById("new-repo-button");
-//   confirmBtn = document.getElementById("confirm-button");
-//   span = document.getElementsByClassName("close")[0];
-// }
-// function handleModal() {
-//   // When the user clicks on <span> (x), close the modal
-//   span.onclick = function() {
-//     modal.style.display = "none";
-//   };
-//
-//   // When the user clicks anywhere outside of the modal, close it
-//   window.onclick = function(event) {
-//
-//     if (event.target === modal) {
-//       modal.style.display = "none";
-//     }
-//   };
-// }
+
+function updateLocalPath() {
+    var text = document.getElementById("repoClone").value;
+    var splitText = text.split(/\.|:|\//);
+    if (splitText.length >= 2) {
+        document.getElementById("repoSave").value = splitText[splitText.length - 1];
+    }
+}
+
 function displayModal(text) {
-    //  initModal();
-    //  handleModal();
     document.getElementById("modal-text-box").innerHTML = text;
     $('#modal').modal('show');
 }
@@ -346,11 +329,10 @@ function updateModalText(text) {
     document.getElementById("modal-text-box").innerHTML = text;
     $('#modal').modal('show');
 }
-
 function showWarning() {
-    document.getElementById("modal-warning-text").innerHTML = "You are about to lose your changes!<br>Are you sure you want to pull?";
+    document.getElementById("modal-warning-text").innerHTML = "You have uncommitted changes!<br>Are you sure you want to pull?";
     $('#modal-warning').modal('show');
-  
+}
 function checkModifiedFiles() {
     var filesHaveBeenModified = false;
     console.log('repoFullPath', repoFullPath);

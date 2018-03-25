@@ -14,7 +14,6 @@ var hasChangedFiles;
 var remote = require('electron').remote;
 var dialog = remote.dialog;
 function warnIfCommitsNotOnRemote() {
-    // Could not find a way to get the log of commits that are not on remotes with nodegit, so using simple-git instead
     var simpleGit = require("simple-git");
     var path = repoFullPath;
     if (path == null || path == "") {
@@ -78,10 +77,9 @@ function addAndCommit() {
             sign = Git.Signature.now(username, password);
         }
         else {
-            sign = Git.Signature["default"](repository);
+            sign = Git.Signature.default(repository);
         }
         commitMessage = document.getElementById('commit-message-input').value;
-        //console.log(sign.toString());
         if (readFile.exists(repoFullPath + "/.git/MERGE_HEAD")) {
             var tid = readFile.read(repoFullPath + "/.git/MERGE_HEAD", null);
             console.log("theirComit: " + tid);
@@ -95,7 +93,6 @@ function addAndCommit() {
     })
         .then(function (oid) {
         theirCommit = null;
-        //console.log("8.0");
         console.log("Commit successful: " + oid.tostrS());
         hideDiffPanel();
         clearModifiedFilesList();
@@ -112,7 +109,6 @@ function addAndCommit() {
         updateModalText("Oops, error occours! If u haven't login, please login and try again.");
     });
 }
-// Clear all modified files from the left file panel
 function clearModifiedFilesList() {
     var filePanel = document.getElementById("files-changed");
     while (filePanel.firstChild) {
@@ -131,19 +127,6 @@ function clearSelectAllCheckbox() {
     document.getElementById('select-all-checkbox').checked = false;
 }
 function getAllCommits(callback) {
-    // Git.Repository.open(repoFullPath)
-    // .then(function(repo) {
-    //   return repo.getHeadCommit();
-    // })
-    // .then(function(firstCommitOnMaster){
-    //   let history = firstCommitOnMaster.history(Git.Revwalk.SORT.Time);
-    //
-    //   history.on("end", function(commits) {
-    //     callback(commits);
-    //   });
-    //
-    //   history.start();
-    // });
     var repos;
     var allCommits = [];
     var aclist = [];
@@ -197,9 +180,6 @@ function pullFromRemote() {
     else {
         var repository_1;
         var branch_1 = document.getElementById("branch-name").innerText;
-        // if (modifiedFiles.length > 0) {
-        //   updateModalText("Please commit before pulling from remote!");
-        // }
         Git.Repository.open(repoFullPath)
             .then(function (repo) {
             repository_1 = repo;
@@ -230,7 +210,7 @@ function pullFromRemote() {
             .then(function (annotated) {
             console.log("4.0  " + annotated);
             Git.Merge.merge(repository_1, annotated, null, {
-                checkoutStrategy: Git.Checkout.STRATEGY.FORCE
+                checkoutStrategy: Git.Checkout.STRATEGY.FORCE,
             });
             theirCommit = annotated;
         })
@@ -246,9 +226,6 @@ function pullFromRemote() {
             }
         });
     }
-    //   .then(function(updatedRepository) {
-    //     refreshAll(updatedRepository);
-    // });
 }
 function pushToRemote() {
     var branch = document.getElementById("branch-name").innerText;
@@ -283,7 +260,6 @@ function createBranch() {
     console.log(branchName + "!!!!!!");
     Git.Repository.open(repoFullPath)
         .then(function (repo) {
-        // Create a new branch on head
         repos = repo;
         addCommand("git branch " + branchName);
         return repo.getHeadCommit()
@@ -338,7 +314,6 @@ function mergeCommits(from) {
     Git.Repository.open(repoFullPath)
         .then(function (repo) {
         repos = repo;
-        //return repos.getCommit(fromSha);
         addCommand("git merge " + from);
         return Git.Reference.nameToId(repos, 'refs/heads/' + from);
     })
@@ -349,7 +324,7 @@ function mergeCommits(from) {
         .then(function (annotated) {
         console.log("4.0  " + annotated);
         Git.Merge.merge(repos, annotated, null, {
-            checkoutStrategy: Git.Checkout.STRATEGY.FORCE
+            checkoutStrategy: Git.Checkout.STRATEGY.FORCE,
         });
         theirCommit = annotated;
     })
@@ -371,7 +346,6 @@ function rebaseCommits(from, to) {
     Git.Repository.open(repoFullPath)
         .then(function (repo) {
         repos = repo;
-        //return repos.getCommit(fromSha);
         addCommand("git rebase " + to);
         return Git.Reference.nameToId(repos, 'refs/heads/' + from);
     })
@@ -497,9 +471,7 @@ function displayModifiedFiles() {
                 }
             }
             modifiedFiles.forEach(displayModifiedFile);
-            // Add modified file to array of modified files 'modifiedFiles'
             function addModifiedFile(file) {
-                // Check if modified file is already being displayed
                 var filePaths = document.getElementsByClassName('file-path');
                 for (var i = 0; i < filePaths.length; i++) {
                     if (filePaths[i].innerHTML === file.path()) {
@@ -513,7 +485,6 @@ function displayModifiedFiles() {
                     fileModification: modification
                 });
             }
-            // Find HOW the file has been modified
             function calculateModification(status) {
                 if (status.isNew()) {
                     return "NEW";
@@ -534,13 +505,11 @@ function displayModifiedFiles() {
                     return "IGNORED";
                 }
             }
-            // Add the modified file to the left file panel
             function displayModifiedFile(file) {
                 var filePath = document.createElement("p");
                 filePath.className = "file-path";
                 filePath.innerHTML = file.filePath;
                 var fileElement = document.createElement("div");
-                // Set how the file has been modified
                 if (file.fileModification === "NEW") {
                     fileElement.className = "file file-created";
                 }
@@ -671,8 +640,6 @@ function cleanRepo(repository) {
 function removeUntrackedFiles(arrayStatusFile) {
     var filesToClean = [];
     arrayStatusFile.forEach(function (statusFile) {
-        // Files marked as new are untracked, hence should be removed
-        // Files removed with fs as nodegit does not have implementation of git clean
         if (statusFile.isNew()) {
             filesToClean.push(statusFile.path());
             var filePath = statusFile.path();
@@ -696,7 +663,7 @@ window.addEventListener('beforeunload', function (evt) {
             type: 'question',
             buttons: ['Yes', 'No'],
             title: 'Confirm',
-            message: 'You are about to lose your changes without committing/stashing/pushing.\nAre you sure you want to exit?'
+            message: 'You have uncommitted changes.\nAre you sure you still want to exit?'
         });
         if (result == 0) {
             hasChangedFiles = false;
@@ -704,3 +671,4 @@ window.addEventListener('beforeunload', function (evt) {
         }
     });
 });
+module.exports = {};
