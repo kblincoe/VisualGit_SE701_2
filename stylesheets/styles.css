@@ -62,7 +62,6 @@ p, h1 {
 
 @media screen and (max-width: 767px) {
     .navbar .navbar-collapse .navbar-right > li:last-child { padding-left: 15px; padding-right: 15px; }
-
     .navbar .nav-collapse { margin: 7.5px auto; padding: 0; }
     .navbar .nav-collapse .navbar-form { margin: 0; }
     .nav-collapse>li { float: none; }
@@ -140,6 +139,10 @@ body .navbar .dropdown-menu {
   background-color: #282828;
   width: 250px;
   color: #ffffff;
+}
+
+body .navbar .dropdown-menu:hover {
+  cursor: pointer;
 }
 
 body .navbar .dropdown-menu a {
@@ -364,6 +367,7 @@ body .add-repository-panel .back-button {
 
 body .add-repository-panel .back-button:hover {
   opacity: 1;
+  cursor: pointer;
 }
 
 body .add-repository-panel h1 {
