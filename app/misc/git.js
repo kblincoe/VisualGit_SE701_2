@@ -527,17 +527,22 @@ function displayModifiedFiles() {
                 checkbox.type = "checkbox";
                 checkbox.className = "checkbox";
                 fileElement.appendChild(checkbox);
+                var isCheckboxClicked = false;
                 checkbox.onclick = function () {
-                    showOrHideDiffPanel();
-                    console.debug(this);
-                    if (this.checked == false) {
+                    isCheckboxClicked = true;
+                    if (checkbox.checked == false) {
                         clearSelectAllCheckbox();
                     }
                 };
                 document.getElementById("files-changed").appendChild(fileElement);
-                fileElement.onclick = showOrHideDiffPanel;
+                fileElement.onclick = function () {
+                    if (!isCheckboxClicked) {
+                        showOrHideDiffPanel(fileElement, file);
+                    }
+                    isCheckboxClicked = false;
+                };
             }
-            function showOrHideDiffPanel() {
+            function showOrHideDiffPanel(fileElement, file) {
                 var doc = document.getElementById("diff-panel");
                 console.log(doc.style.width + 'oooooo');
                 if (doc.style.width === '0px' || doc.style.width === '') {
