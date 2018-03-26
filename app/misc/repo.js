@@ -312,15 +312,6 @@ function checkoutRemoteBranch(element) {
         });
     });
 }
-
-function updateLocalPath() {
-    var text = document.getElementById("repoClone").value;
-    var splitText = text.split(/\.|:|\//);
-    if (splitText.length >= 2) {
-        document.getElementById("repoSave").value = splitText[splitText.length - 1];
-    }
-}
-
 function displayModal(text) {
     document.getElementById("modal-text-box").innerHTML = text;
     $('#modal').modal('show');

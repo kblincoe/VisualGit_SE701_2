@@ -64,7 +64,7 @@ function autoFillPassword(callback) {
             var machineId_1 = require("node-machine-id");
             var uidSalt = saltedPassword.substring(pw.length, saltedPassword.length);
             var uidTime = saltedTime.substring(lastLogin.length, saltedTime.length);
-            if ((machineId_1.machineIdSync() == uidSalt) && (uidSalt == uidTime) && ((new Date).getTime() - lastLogin < 604800)) {
+            if ((machineId_1.machineIdSync() == uidSalt) && (uidSalt == uidTime) && ((new Date).getTime() - lastLogin < 604800000)) {
                 document.getElementById("username").value = obj.loginInfo[0]["username"];
                 document.getElementById("password").value = pw;
                 document.getElementById("rememberme").checked = true;
@@ -72,6 +72,7 @@ function autoFillPassword(callback) {
             else {
                 deleteLoginDetails();
             }
+            signInPage(callback);
         }
     });
 }
