@@ -228,13 +228,14 @@ function clearBranchElement() {
     ul.innerHTML = '';
     ul.appendChild(li);
 }
-function displayBranch(name, id, onclick) {
+function displayBranch(name, id, onclick, dblclick) {
     var ul = document.getElementById(id);
     var li = document.createElement("li");
     var a = document.createElement("a");
     a.setAttribute("href", "#");
     a.setAttribute("class", "list-group-item");
     a.setAttribute("onclick", onclick);
+    a.setAttribute("ondblclick", dblclick);
     li.setAttribute("role", "presentation");
     a.appendChild(document.createTextNode(name));
     li.appendChild(a);
