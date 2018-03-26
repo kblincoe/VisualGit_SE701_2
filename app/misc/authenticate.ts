@@ -81,13 +81,14 @@ function autoFillPassword(callback){
       let uidTime = saltedTime.substring(lastLogin.length, saltedTime.length);
 
       //login details are deleted it does not belong to the original computer the details were generated for or if login details is older than 7 days
-      if ((machineId.machineIdSync() == uidSalt) && (uidSalt == uidTime) && ((new Date).getTime()-lastLogin < 604800)){
+      if ((machineId.machineIdSync() == uidSalt) && (uidSalt == uidTime) && ((new Date).getTime()-lastLogin < 604800000)){
         document.getElementById("username").value = obj.loginInfo[0]["username"];
         document.getElementById("password").value = pw;
-        document.getElementById("rememberme").checked = true;
+          document.getElementById("rememberme").checked = true;
       } else {
         deleteLoginDetails();
-      }
+        }
+        signInPage(callback);
     }
   });
 }
