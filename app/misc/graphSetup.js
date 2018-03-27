@@ -2,6 +2,9 @@ var vis = require("vis");
 var $ = require("jquery");
 var options, bsNodes, bsEdges, abNodes, abEdges, nodes, edges, network;
 var startP, endP, secP = null, fromNode = null, toNode;
+var clickTimeoutVariable = 0;
+var globalNode;
+var githubUsername = require('github-username');
 function drawGraph() {
     bsNodes = new vis.DataSet([]);
     bsEdges = new vis.DataSet([]);
@@ -9,6 +12,7 @@ function drawGraph() {
     abEdges = new vis.DataSet([]);
     nodes = new vis.DataSet([]);
     edges = new vis.DataSet([]);
+    // create a network
     var container = document.getElementById("my-network");
     container.innerHTML = '';
     var bsData = {
@@ -25,7 +29,7 @@ function drawGraph() {
     };
     options = {
         configure: {
-            enabled: false,
+            enabled: false
         },
         edges: {
             arrows: {
@@ -34,7 +38,7 @@ function drawGraph() {
                     scaleFactor: 0.6
                 },
                 middle: false,
-                from: false,
+                from: false
             },
             color: "#39c0ba",
             hoverWidth: 0,
@@ -44,9 +48,10 @@ function drawGraph() {
             smooth: {
                 enabled: true,
                 type: "cubicBezier",
+                // forceDirection: "horizontal",
                 roundness: 0.5
             },
-            width: 3,
+            width: 3
         },
         groups: {},
         interaction: {
@@ -66,11 +71,11 @@ function drawGraph() {
             selectable: true,
             selectConnectedEdges: false,
             tooltipDelay: 300,
-            zoomView: true,
+            zoomView: true
         },
         layout: {
             randomSeed: 1,
-            improvedLayout: true,
+            improvedLayout: true
         },
         manipulation: {
             enabled: false,
@@ -92,7 +97,7 @@ function drawGraph() {
                     }
                 },
                 borderWidth: 2,
-                borderWidthSelected: 2,
+                borderWidthSelected: 2
             }
         },
         nodes: {
@@ -108,13 +113,13 @@ function drawGraph() {
                 hover: {
                     border: "#F00",
                     background: "#FFF"
-                },
+                }
             },
-            shadow: true,
+            shadow: true
         },
         physics: {
-            enabled: false,
-        },
+            enabled: false
+        }
     };
     network = new vis.Network(container, bsData, options);
     getAllCommits(function (commits) {
@@ -123,7 +128,52 @@ function drawGraph() {
     network.on("stabilizationIterationsDone", function () {
         network.setOptions({ physics: false });
     });
+    function singleClickTimeout() {
+        //single click event has occurred
+        clearTimeout(clickTimeoutVariable);
+        if (globalNode === undefined) {
+            return;
+        }
+        else {
+            var nodeId = globalNode;
+            var email_1 = null;
+            if (flag == "abstract") {
+                email_1 = abNodes.get(nodeId)['email'];
+            }
+            else if (flag == "node") {
+                email_1 = nodes.get(nodeId)['email'];
+            }
+            else {
+                email_1 = bsNodes.get(nodeId)['email'];
+            }
+            var getUsernamePromise = githubUsername(email_1).then(function (username) {
+                setProfileLinks(username, email_1);
+            });
+            getUsernamePromise["catch"](function (e) {
+                setPrivateEmailMessage();
+            });
+        }
+    }
+    function setProfileLinks(username, email) {
+        document.getElementById('ProfileInteractionPopup').innerHTML = "<h4 class=" + '"' + "modal-title" + '"' + ">Profile Interaction</h4>";
+        document.getElementById('commitEmailAddress').innerHTML = "<a href='mailto:" + email + "'>Click here to email user</a>";
+        document.getElementById('commitUsername').innerHTML = "<a href=" + '"' + "https://github.com/" + username + '"' + " target=" + '"' + "_blank" + '"' + ">Click here to visit user's profile</a>";
+        $('#profileModal').modal('show');
+    }
+    function setPrivateEmailMessage() {
+        document.getElementById('ProfileInteractionPopup').innerHTML = "<h4 class=" + '"' + "modal-title" + '"' + ">That user's email address is private</h4>";
+        document.getElementById('commitEmailAddress').innerHTML = "";
+        document.getElementById('commitUsername').innerHTML = "";
+        $('#profileModal').modal('show');
+    }
+    network.on("click", function (callback) {
+        //start timer to distinguish between a single and double click event
+        clearTimeout(clickTimeoutVariable);
+        globalNode = callback.nodes[0];
+        clickTimeoutVariable = setTimeout(singleClickTimeout, 250);
+    }, false);
     network.on("doubleClick", function (callback) {
+        clearTimeout(clickTimeoutVariable); //stops timer allowing us to distinguish between single and double click events
         if (callback.nodes[0] === undefined) {
             return;
         }
@@ -135,7 +185,7 @@ function drawGraph() {
             scale: 1,
             animation: {
                 duration: 1000,
-                easingFunction: "easeInOutQuad",
+                easingFunction: "easeInOutQuad"
             }
         };
         network.focus(callback.nodes[0], moveOptions);
@@ -146,18 +196,20 @@ function drawGraph() {
             scale: 1,
             animation: {
                 duration: 1000,
-                easingFunction: "easeInOutQuad",
+                easingFunction: "easeInOutQuad"
             }
         };
         if (network.getScale() > 1.5 && callback.direction === '+' && flag === 'abstract') {
             network.setData(data);
             flag = 'node';
             network.fit(moveOptions);
+            //network.redraw();
         }
         else if (network.getScale() < 0.4 && callback.direction === '-' && flag === 'node') {
             network.setData(abData);
             flag = 'abstract';
             network.fit(moveOptions);
+            //network.redraw();
         }
         else if (network.getScale() > 1.5 && callback.direction === '+' && flag === 'basic') {
             network.setData(abData);
@@ -204,5 +256,15 @@ function drawGraph() {
             toNode = undefined;
         }
         console.log("toNode:  " + toNode);
+        //   if (toNode !== undefined) {
+        //     console.log("clicked !!!!!!!!")
+        //     network.selectNodes([toNode], [false]);
+        //     addBranchestoNode(nodes.get(toNode)['label']);
+        //     $("#branchOptions").css({
+        //     display: "block",
+        //     left: callback.pointer.DOM.x,
+        //     top: callback.pointer.DOM.y
+        //  });
+        //   }
     });
 }
