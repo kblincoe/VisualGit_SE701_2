@@ -57,6 +57,22 @@ import { Component } from "@angular/core";
         </div><!-- /.modal-content -->
       </div><!-- /.modal-dialog -->
     </div>
+    <div class="modal fade" id="profileModal" tabindex="-1" role="dialog">
+      <div class="modal-dialog" role="document">
+        <div class="modal-content">
+          <div class="modal-header">
+            <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+            <div id = "ProfileInteractionPopup">
+            <h4 class="modal-title">Profile Interaction</h4>
+            </div>
+          </div>
+          <div class="modal-body">
+            <div id="commitEmailAddress"></div>
+            <div id="commitUsername"></div>
+          </div>
+        </div><!-- /.modal-content -->
+      </div><!-- /.modal-dialog -->
+    </div>
   </div>
   `
 })

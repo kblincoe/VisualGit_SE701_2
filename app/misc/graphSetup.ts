@@ -2,6 +2,9 @@ let vis = require("vis");
 let $ = require("jquery");
 let options, bsNodes, bsEdges, abNodes, abEdges, nodes, edges, network;
 let startP, endP, secP = null, fromNode = null, toNode;
+let clickTimeoutVariable = 0;
+let globalNode;
+let githubUsername = require('github-username');
 
 
 function drawGraph() {
@@ -148,7 +151,52 @@ function drawGraph() {
     network.setOptions( { physics: false } );
   });
 
+  function singleClickTimeout() {
+    //single click event has occurred
+    clearTimeout(clickTimeoutVariable);
+    if (globalNode === undefined) {
+      return;
+    } 
+    else {
+      let nodeId: number = globalNode;
+      let email = null;
+      if (flag == "abstract") {
+        email = abNodes.get(nodeId)['email'];
+      } else if (flag == "node") {
+        email = nodes.get(nodeId)['email'];
+      } else {
+        email = bsNodes.get(nodeId)['email'];
+      }
+      let getUsernamePromise = githubUsername(email).then(username => {
+        setProfileLinks(username, email);
+      });
+      getUsernamePromise.catch(e => {
+        setPrivateEmailMessage();
+      });
+    }
+  }
+
+  function setProfileLinks(username, email) {
+    document.getElementById('ProfileInteractionPopup').innerHTML = "<h4 class=" + '"' + "modal-title" + '"' + ">Profile Interaction</h4>";
+    document.getElementById('commitEmailAddress').innerHTML = "<a href='mailto:" + email + "'>Click here to email user</a>";
+    document.getElementById('commitUsername').innerHTML = "<a href=" + '"' + "https://github.com/" + username + '"' + " target=" + '"' + "_blank" + '"' + ">Click here to visit user's profile</a>";
+    $('#profileModal').modal('show');
+  }
+  function setPrivateEmailMessage() {
+      document.getElementById('ProfileInteractionPopup').innerHTML = "<h4 class=" + '"' + "modal-title" + '"' + ">That user's email address is private</h4>";
+      document.getElementById('commitEmailAddress').innerHTML = "";
+      document.getElementById('commitUsername').innerHTML = "";
+      $('#profileModal').modal('show');
+  }
+  network.on("click", function (callback) {
+      //start timer to distinguish between a single and double click event
+      clearTimeout(clickTimeoutVariable);
+      globalNode = callback.nodes[0];
+      clickTimeoutVariable = setTimeout(singleClickTimeout, 250);
+  }, false);
+
   network.on("doubleClick", function(callback) {
+    clearTimeout(clickTimeoutVariable); //stops timer allowing us to distinguish between single and double click events
     if (callback.nodes[0] === undefined) {
       return;
     } else {
