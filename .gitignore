@@ -2,7 +2,8 @@ node_modules/
 typings/
 tmp/
 dist/
-stylesheets/variables.css
+stylesheets/*.css
 npm-debug.log
 git-history*
 login.json
+
