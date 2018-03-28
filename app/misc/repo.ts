@@ -1,7 +1,8 @@
 let Git = require("nodegit");
-let $ = require('jQuery');
+let $ = require('jquery');
 let repoFullPath;
 let repoLocalPath;
+let repoRemoteUrl;
 let bname = {};
 let branchCommit = [];
 let remoteName = {};
@@ -132,6 +133,16 @@ function addBranchestoNode(thisB: string) {
 function refreshAll(repository) {
   let branch;
   bname = [];
+
+  repository.getRemotes().then(remotes => {
+    if (remotes.length > 0) {
+      repository.getRemote(remotes[0])
+      .then(remote => {
+        repoRemoteUrl = remote.url();
+      });
+    }
+  });
+
   repository.getCurrentBranch()
   .then(function(reference) {
     let branchParts = reference.name().split("/");
@@ -179,6 +190,7 @@ function refreshAll(repository) {
   })
   .then(function() {
     console.log("Updating the graph and the labels");
+    updateIssues();
     drawGraph();
     document.getElementById("repo-name").innerHTML = repoLocalPath;
     document.getElementById("branch-name").innerHTML = branch + '<span class="caret"></span>';
