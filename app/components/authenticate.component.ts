@@ -48,14 +48,15 @@ import { openForgotPasswordPage } from "../misc/forgotPassword";
         <button type="submit" style="width:280px;" class="btn btn-primary" onclick="switchToMainPanel()">Continue without sign in</button>
       </form>
     </div>
-    <img src onerror='autoFillPassword()'>
+    <img src onerror='autoFillPassword(switchToMainPanel)'>
   `
 })
 
 export class AuthenticateComponent {
   switchToMainPanel(): void {
     signInPage(switchToMainPanel);
-  }
+    }
+
 
   openForgotPasswordPage(): void {
     openForgotPasswordPage();

@@ -6,10 +6,122 @@ p, h1 {
   font-family: 'Montserrat', sans-serif;
 }
 
+.btn:focus {
+  outline: 0;
+}
+
+.add-repository-button {
+  position: relative;
+  z-index: 2;
+}
+
+.add-repository-button:hover {
+    cursor: pointer;
+}
+
+.btn.btn-circle {
+  border-radius: 50px;
+}
+.btn.btn-outline {
+  background-color: transparent;
+}
+
+.navbar-nav {
+  list-style-type: none;
+}
+
+/*http://bootsnipp.com/snippets/ZkpRl*/
+.navbar-nav.navbar-right .btn {
+  position: relative; z-index: 2;
+  padding: 4px 20px;
+  margin: 10px auto;
+}
+
+.navbar .navbar-collapse {
+  position: relative;
+}
+.navbar .navbar-collapse .navbar-right > li:last-child {
+  padding-left: 22px;
+}
+.navbar .nav-collapse {
+  position: absolute;
+  z-index: 1;
+  top: 0; left: 0;
+  right: 0;
+  bottom: 0;
+  margin: 0;
+  padding-right: 120px;
+  padding-left: 80px;
+  width: 100%;
+}
+
+#Email1 {
+  width: 100px;
+}
+
+#Password1 {
+  width: 100px;
+}
+
+@media screen and (max-width: 767px) {
+    .navbar .navbar-collapse .navbar-right > li:last-child { padding-left: 15px; padding-right: 15px; }
+
+    .navbar .nav-collapse { margin: 7.5px auto; padding: 0; }
+    .navbar .nav-collapse .navbar-form { margin: 0; }
+    .nav-collapse>li { float: none; }
+}
+
+.navbar-white {
+  background-color: $light-grey;
+  border-bottom: 2px solid $darker-grey;
+}
+
+.navbar-green {
+  background-color: $green;
+  border-bottom: 2px solid $light-green;
+}
+
+.navbar-green .navbar-nav > li > a:hover,
+.navbar-green .navbar-nav > li > a:focus {
+  text-decoration: none;
+  background-color: $green;
+}
+
+.navbar-green .navbar-nav > .open > a,
+.navbar-green .navbar-nav > .open > a:focus,
+.navbar-green .navbar-nav > .open > a:hover {
+  color: $blue;
+  background-color: $green;
+}
+
+.navbar-blue {
+  background-color: $pale-blue;
+  border-bottom: 2px solid $light-blue;
+}
+
+.navbar-blue .nav > li > a:hover,
+.navbar-blue .nav > li > a:focus {
+  text-decoration: none;
+  background-color: $pale-blue;
+}
+
+.navbar-blue .navbar-nav > .open > a,
+.navbar-blue .navbar-nav > .open > a:focus,
+.navbar-blue .navbar-nav > .open > a:hover {
+  color: $blue;
+  background-color: $pale-blue;
+}
+
+#branchOptions {
+  position: absolute;
+  display:none;
+}
+
 body {
   margin: 0;
   width: 100vw;
   height: 100vh;
+  overflow: hidden;
 
   .header {
     width: 100%;
@@ -139,9 +251,10 @@ body {
 
   .file-panel {
     width: 20%;
-    height: 75vh;
+    height: 80vh;
     background-color: $dark-grey;
     float: left;
+    z-index: 0;
     overflow-y: scroll;
     padding-bottom: 10px;
 
@@ -254,10 +367,52 @@ body {
 
   }
 
+  .navbar {
+    margin-bottom: 0px;
+    font-size: 20px;
+    z-index: 1;
+
+    .dropdown-menu {
+      z-index: 300;
+      background-color: $dark-grey;
+      width: 250px;
+      color: $white
+
+      a {
+        color: $black;
+      }
+    }
+
+    .dropdown-menu:hover {
+      cursor: pointer;
+    }
+
+    .fa-cloud-upload {
+      margin: 4px;
+    }
+
+    .fa-cloud-upload:hover {
+      cursor: pointer;
+    }
+
+    .fa-cloud-download {
+      margin: 4px;
+    }
+
+    .fa-cloud-download:hover {
+      cursor: pointer;
+    }
+
+    .branch-name:hover {
+      cursor:pointer;
+    }
+  }
+
+
   .body-panel {
     width: 80%;
-    height: 80%;
     float: right;
+    z-index: 0;
 
     .diff-panel {
       width: 0;
@@ -265,8 +420,8 @@ body {
       float: left;
 
       .diff-panel-body {
-        width: 90%;
-        height: 75vh;
+        width: 100%;
+        height: 80vh;
         float: left;
         background-color: $dark-grey;
         color: $white;
@@ -278,17 +433,6 @@ body {
           white-space: pre;
           font-family: monospace;
         }
-      }
-
-      .diff-panel-minimise {
-        width: 10%;
-        float: right;
-        height: 100%;
-        display: flex;
-        justify-content: center;
-        align-items: center;
-        background-color: $dark-grey;
-        visibility: hidden;
       }
 
       .diff-panel-minimise:hover {
@@ -303,7 +447,7 @@ body {
 
       .network {
         width: 100%;
-        height: 75vh;
+        height: 80vh;
         margin: 0;
         padding: 0;
         background-color: $darker-grey;
@@ -311,18 +455,25 @@ body {
     }
   }
 
-  .user-auth {
+  .authenticate {
     position: absolute;
-    height: 75vh;
+    height: 100%;
     width: 100%;
     background-color: $darker-grey;
-    z-index: 20;
+    z-index: 30;
     box-sizing: border-box;
+    color: $white;
+
+    .input-group {
+        margin-left: auto;
+        margin-right: auto;
+        text-align: center;
+    }
   }
 
   .add-repository-panel {
     position: absolute;
-    height: 75vh;
+    height: 80vh;
     width: 100%;
     background-color: $darker-grey;
     z-index: -10;
@@ -341,6 +492,7 @@ body {
 
     .back-button:hover {
       opacity: 1;
+      cursor: pointer;
     }
 
     h1 {
@@ -425,7 +577,7 @@ body {
     border-top: 1px solid $darker-grey;
     position: fixed;
     bottom: 0;
-    overflow-y: scroll;
+    overflow-y: auto;
 
     p {
       margin: 0;
@@ -450,6 +602,68 @@ body {
   background-color: $file-deleted;
 }
 
-.navbar-nav {
+.file-panel {
+  overflow: scroll;
+}
+
+.modal-body {
+  word-wrap: break-word;
+}
+.fa-cloud-download, .fa-cloud-upload {
+  color: $light-grey;
+  border: 1px solid $white;
+  border-radius: 10px;
+  width: 72px;
+}
+
+.fa-cloud-download:hover, .fa-cloud-upload:hover {
+  color: $white;
+  border: 1px solid $light-grey;
+}
+.loading {
+  color: $white;
+  display: flex;
+  justify-content: center;
+  flex-flow: column;
+  height: 70vh;
+  background-color: $darker-grey;
+  text-align: center;
+}
+
+.circleLoader {
+  stroke-dasharray: 200;
+  stroke-dashoffset:72;
+  transform-origin: center;
+}
+
+.spinner {
+  margin-top: 2rem;
+  min-width: 1.4rem;
+  min-height: 1.4rem;
+  animation: rotator 1s linear infinite;
+  stroke: white;
+  max-height: 10rem;
+  max-width: 10rem;
+  align-self: center;
+}
+
+.notLoading {
+  display: none;
+}
+
+@keyframes rotator {
+  0% { transform: rotate(0deg); }
+  100% { transform: rotate(360deg); }
+}
+
+.modal-title-warning {
+  color : red;
+}
+
+.modal-footer .btn.btn-pull {
+  background-color : $green;
+}
+
+#repo-dropdown {
   list-style-type: none;
 }

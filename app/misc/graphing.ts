@@ -309,6 +309,7 @@ function makeBasicNode(c, column: number) {
       commitId: c.toString(),
       shape: "circularImage",
       title: title,
+      email: email,
       image: img4User(name),
       physics: false,
       fixed: (id === 1),
@@ -344,6 +345,7 @@ function makeBasicNode(c, column: number) {
         id: id + numOfCommits * (i + 1),
         shape: "box",
         title: branchName,
+        email: email,
         label: shortName,
         physics: false,
         fixed: false,
@@ -377,7 +379,7 @@ function makeAbsNode(c, column: number) {
         abstractList[i]['count'] += 1;
         count = abstractList[i]['count'];
         abstractList[i]['sha'].push(c.toString());
-        abNodes.update({id: i+1, title: "Author: " + email + "<br>" + "Number of Commits: " + count});
+        abNodes.update({id: i+1, title: "Number of Commits: " + count});
         break;
       }
     }
@@ -385,12 +387,13 @@ function makeAbsNode(c, column: number) {
 
   if (flag) {
     let id = absNodeId++;
-    let title = "Author: " + email + "<br>" + "Number of Commits: " + count;
+    let title = "Number of Commits: " + count;
 
     abNodes.add({
       id: id,
       shape: "circularImage",
       title: title,
+      email: email,
       image: img4User(name),
       physics: false,
       fixed: (id === 1),
@@ -411,6 +414,7 @@ function makeAbsNode(c, column: number) {
           id: id + numOfCommits * (i + 1),
           shape: "box",
           title: branchName,
+          email: email,
           label: shortName,
           physics: false,
           fixed: false,
@@ -447,12 +451,13 @@ function makeNode(c, column: number) {
   let name = getName(c.author().toString());
   let stringer = c.author().toString().replace(/</, "%").replace(/>/, "%");
   let email = stringer.split("%")[1];
-  let title = "Author: " + email + "<br>" + "Message: " + c.message();
+  let title = "Message: " + c.message();
   let flag = false;
   nodes.add({
     id: id,
     shape: "circularImage",
     title: title,
+    email: email,
     image: img4User(name),
     physics: false,
     fixed: true,
@@ -473,6 +478,7 @@ function makeNode(c, column: number) {
         id: id + numOfCommits * (i + 1),
         shape: "box",
         title: branchName,
+        email: email,
         label: shortName,
         physics: false,
         fixed: false,

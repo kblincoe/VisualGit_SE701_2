@@ -626,20 +626,28 @@ function displayModifiedFiles() {
           checkbox.className = "checkbox";
           fileElement.appendChild(checkbox);
 
-        checkbox.onclick = function(this) {
-          showOrHideDiffPanel();
-          console.debug(this);
-          if (this.checked == false) {
+          /* Checkbox's onclick is called before the file element's. We want checkbox activation to prevent execution of the file element 
+          onclick so using a lock variable to achieve that. Variable is locked when checkbox is used which prevents the parent onclick 
+          from executing. */
+          let isCheckboxClicked = false;
+        checkbox.onclick = () => {
+          isCheckboxClicked = true; // lock
+          if (checkbox.checked == false) {
             clearSelectAllCheckbox();
           }
         }
 
         document.getElementById("files-changed").appendChild(fileElement);
 
-        fileElement.onclick = showOrHideDiffPanel;
+        fileElement.onclick = () => {
+          if (!isCheckboxClicked) {
+            showOrHideDiffPanel(fileElement, file);
+          }
+          isCheckboxClicked = false; //unlock
+        }
       }
 
-      function showOrHideDiffPanel() {
+      function showOrHideDiffPanel(fileElement, file) {
         let doc = document.getElementById("diff-panel");
         console.log(doc.style.width + 'oooooo');
         if (doc.style.width === '0px' || doc.style.width === '') {

@@ -249,13 +249,14 @@ function clearBranchElement() {
   ul.appendChild(li);
 }
 
-function displayBranch(name, id, onclick) {
+function displayBranch(name, id, onclick, dblclick) {
   let ul = document.getElementById(id);
   let li = document.createElement("li");
   let a = document.createElement("a");
   a.setAttribute("href", "#");
   a.setAttribute("class", "list-group-item");
   a.setAttribute("onclick", onclick);
+  a.setAttribute("ondblclick", dblclick);
   li.setAttribute("role", "presentation")
   a.appendChild(document.createTextNode(name));
   li.appendChild(a);

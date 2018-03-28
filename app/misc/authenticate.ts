@@ -26,9 +26,9 @@ function signOut() {
 }
 
 function signInHead(callback) {
-  setCredentials(document.getElementById("Email1").value, 
+  setCredentials(document.getElementById("Email1").value,
                  document.getElementById("Password1").value);
-  
+
   console.log('user has logged in successfully');
   getUserInfo(callback);
 
@@ -37,7 +37,7 @@ function signInHead(callback) {
 }
 
 function signInPage(callback) {
-  setCredentials(document.getElementById("username").value, 
+  setCredentials(document.getElementById("username").value,
                 document.getElementById("password").value);
   console.log('user has logged in successfully');
   rememberMe = document.getElementById("rememberme").checked;
@@ -81,13 +81,14 @@ function autoFillPassword(callback){
       let uidTime = saltedTime.substring(lastLogin.length, saltedTime.length);
 
       //login details are deleted it does not belong to the original computer the details were generated for or if login details is older than 7 days
-      if ((machineId.machineIdSync() == uidSalt) && (uidSalt == uidTime) && ((new Date).getTime()-lastLogin < 604800)){
+      if ((machineId.machineIdSync() == uidSalt) && (uidSalt == uidTime) && ((new Date).getTime()-lastLogin < 604800000)){
         document.getElementById("username").value = obj.loginInfo[0]["username"];
         document.getElementById("password").value = pw;
-        document.getElementById("rememberme").checked = true;
+          document.getElementById("rememberme").checked = true;
       } else {
         deleteLoginDetails();
-      }
+        }
+        signInPage(callback);
     }
   });
 }
@@ -121,7 +122,7 @@ function saveLoginDetails(username, password){
 
 function setCredentials(username, password) {
   cred = Git.Cred.userpassPlaintextNew(username, password);
-  
+
   client = github.client({
     username: username,
     password: password
@@ -129,12 +130,12 @@ function setCredentials(username, password) {
 }
 
 function clearCredentials() {
-  /* 
-  Instantiating the credential objects with null, undefined 
-  or empty string objects as the username/password parameters leads 
+  /*
+  Instantiating the credential objects with null, undefined
+  or empty string objects as the username/password parameters leads
   to errors and unwanted behaviour.
   aka setCredentials(null, null);
-  
+
   Setting cred and client as undefined gives authorisation errors
   from GitHub as expected. Achieves sign out functionality.
   */
@@ -185,7 +186,7 @@ function getUserInfo(callback) {
         console.log(rep['html_url']);
         let splitText = rep['html_url'].split(/\.|:|\//);
         rep['name'] = splitText[splitText.length-2] + "/" + splitText[splitText.length-1];
-        displayBranch(rep['name'], "repo-dropdown", "selectRepo(this)");
+        displayBranch(rep['name'], "repo-dropdown", "selectRepo(this)", "cloneRepo()");
         repoList[rep['name']] = rep['html_url'];
       }
     }
