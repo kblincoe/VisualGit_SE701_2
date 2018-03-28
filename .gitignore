@@ -3,7 +3,10 @@ typings/
 tmp/
 dist/
 stylesheets/*.css
+app/*.js
+app/components/*.js
+app/misc/*.js
+app/services/*.js
 npm-debug.log
 git-history*
 login.json
-
