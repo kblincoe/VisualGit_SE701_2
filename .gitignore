@@ -2,7 +2,11 @@ node_modules/
 typings/
 tmp/
 dist/
-stylesheets/variables.css
+stylesheets/*.css
+app/*.js
+app/components/*.js
+app/misc/*.js
+app/services/*.js
 npm-debug.log
 git-history*
 login.json

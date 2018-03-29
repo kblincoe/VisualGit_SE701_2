@@ -120,6 +120,12 @@ function clearModifiedFilesList() {
     filesChangedMessage.innerHTML = "Your modified files will appear here";
     filePanel.appendChild(filesChangedMessage);
 }
+function clearStaleFiles(repoPath, fileName) {
+    var fullLocalPath = repoPath + "/" + fileName.parentNode.innerText;
+    if (!fs.existsSync(fullLocalPath)) {
+      fileName.parentNode.remove();
+    }
+  }
 function clearCommitMessage() {
     document.getElementById('commit-message-input').value = "";
 }
@@ -461,6 +467,12 @@ function displayModifiedFiles() {
     Git.Repository.open(repoFullPath)
         .then(function (repo) {
         console.log(repo.isMerging() + "ojoijnkbunmm");
+        let filePaths = document.getElementsByClassName('file-path');
+        for (let i = 0; i < filePaths.length; i++) {
+            if (filePaths[i].parentNode.className !== "file file-deleted") {
+                clearStaleFiles(repoFullPath, filePaths[i]);
+          }
+        }
         repo.getStatus().then(function (statuses) {
             statuses.forEach(addModifiedFile);
             if (modifiedFiles.length !== 0) {
