@@ -46,7 +46,7 @@ import { openForgotPasswordPage } from "../misc/forgotPassword";
             <li class="download"><i class="fa fa-cloud-download fa-2x col-md-2" aria-hidden="true" onclick="pullFromRemote()" title="Pull"></i></li>
           </ul>
 
-          <ul class="navbar-nav navbar-right hidden-xs">
+          <ul class="navbar-nav col-md-1 hidden-xs">
             <li>
               <a class="btn btn-default btn-outline btn-circle"  id="avatar" (click)="clickSignOutButton()">Sign in</a>
             </li>
@@ -66,8 +66,8 @@ import { openForgotPasswordPage } from "../misc/forgotPassword";
             </form>
           </div>
 
-          <ul class="nav navbar-nav col-md-1 hidden-xs">
-            <button class="btn btn-inverse dropdown-toggle btn-sm navbar-btn" id="color-scheme" data-toggle="dropdown">
+          <ul class="nav navbar-nav navbar-right col-md-1 hidden-xs">
+            <button class="btn btn-inverse dropdown-toggle btn-circle navbar-btn" id="color-scheme" data-toggle="dropdown">
               color
               <span class="caret"></span>
             </button>
@@ -146,7 +146,7 @@ import { openForgotPasswordPage } from "../misc/forgotPassword";
         </div><!-- /.modal-content -->
       </div><!-- /.modal-dialog -->
     </div>
-    
+
     <div id="modal-warning" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="mySmallModalLabel" aria-hidden="true">
     <div class="modal-dialog modal-sm">
       <div class="modal-content">
@@ -165,7 +165,7 @@ import { openForgotPasswordPage } from "../misc/forgotPassword";
         </div>
       </div>
     </div>
-  </div>    
+  </div>
   `,
   providers: [RepositoryService, GraphService]
 })
