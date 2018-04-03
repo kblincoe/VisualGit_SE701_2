@@ -649,7 +649,14 @@ function displayModifiedFiles() {
 
       function showOrHideDiffPanel(fileElement, file) {
         let doc = document.getElementById("diff-panel");
+        let editdoc = document.getElementById("texteditor-panel");
         console.log(doc.style.width + 'oooooo');
+        
+        /* if the file text editor is open, ignore the click on the file so the only way a user can
+          leave the editor is through clicking the 'Close editor' button */
+        if (!(editdoc.style.width === '0px' || editdoc.style.width === '')) {
+          return;
+        }
         if (doc.style.width === '0px' || doc.style.width === '') {
           displayDiffPanel();
           document.getElementById("diff-panel-body").innerHTML = "";
@@ -659,9 +666,42 @@ function displayModifiedFiles() {
           } else {
             printFileDiff(file.filePath);
           }
+          /* set up the event handlers on all the buttons in the difference panel and in the file
+             text editor panel. */
+          document.getElementById("editfile-button").onclick = () => {
+            displayFileTexteditor();
+            document.getElementById("texteditor-content").value = getFileContent(file.filePath);
+            // set save changes button to disabled until the user has made changes to the file
+            document.getElementById("savechanges-button").disabled = true;
+            document.getElementById("texteditor-content").onkeyup = () => {
+              document.getElementById("savechanges-button").disabled = false;
+            }
+            document.getElementById("closeeditor-button").onclick = () => {
+              /* close the text editor panel and reopen the differences panel using the same method
+                 so that the panel can update to reflect the changes made in the text editor. */ 
+              hideFileTexteditor();
+              showOrHideDiffPanel(fileElement, file)
+            }
+            document.getElementById("savechanges-button").onclick = () => {
+              writeContentToFile(file.filePath, document.getElementById("texteditor-content").value)
+            }
+          }
         } else {
           hideDiffPanel();
         }
+      }
+
+      function getFileContent(filePath) {
+        let fileLocation = require("path").join(repoFullPath, filePath);
+        let fs = require('fs');
+        return fs.readFileSync(fileLocation);
+      }
+      function writeContentToFile(filePath, content) {
+        let fileLocation = require("path").join(repoFullPath, filePath);
+        let fs = require('fs');
+        fs.writeFile(fileLocation, content, function (err, data) {
+          document.getElementById("savechanges-button").disabled = true;
+        });
       }
 
         function printNewFile(filePath) {

@@ -539,19 +539,28 @@ function displayModifiedFiles() {
                 checkbox.type = "checkbox";
                 checkbox.className = "checkbox";
                 fileElement.appendChild(checkbox);
+                var isCheckboxClicked = false;
                 checkbox.onclick = function () {
-                    showOrHideDiffPanel();
-                    console.debug(this);
-                    if (this.checked == false) {
+                    isCheckboxClicked = true;
+                    if (checkbox.checked == false) {
                         clearSelectAllCheckbox();
                     }
                 };
                 document.getElementById("files-changed").appendChild(fileElement);
-                fileElement.onclick = showOrHideDiffPanel;
+                fileElement.onclick = function () {
+                    if (!isCheckboxClicked) {
+                        showOrHideDiffPanel(fileElement, file);
+                    }
+                    isCheckboxClicked = false;
+                };
             }
-            function showOrHideDiffPanel() {
+            function showOrHideDiffPanel(fileElement, file) {
                 var doc = document.getElementById("diff-panel");
+                var editdoc = document.getElementById("texteditor-panel");
                 console.log(doc.style.width + 'oooooo');
+                if (!(editdoc.style.width === '0px' || editdoc.style.width === '')) {
+                    return;
+                }
                 if (doc.style.width === '0px' || doc.style.width === '') {
                     displayDiffPanel();
                     document.getElementById("diff-panel-body").innerHTML = "";
@@ -561,11 +570,44 @@ function displayModifiedFiles() {
                     else {
                         printFileDiff(file.filePath);
                     }
+<<<<<<< HEAD
+=======
+                    document.getElementById("editfile-button").onclick = function () {
+                        displayFileTexteditor();
+                        document.getElementById("texteditor-content").value = getFileContent(file.filePath);
+                        document.getElementById("savechanges-button").disabled = true;
+                        document.getElementById("texteditor-content").onkeyup = function () {
+                            document.getElementById("savechanges-button").disabled = false;
+                        };
+                        document.getElementById("closeeditor-button").onclick = function () {
+                            hideFileTexteditor();
+                            showOrHideDiffPanel(fileElement, file);
+                        };
+                        document.getElementById("savechanges-button").onclick = function () {
+                            writeContentToFile(file.filePath, document.getElementById("texteditor-content").value);
+                        };
+                    };
+>>>>>>> a007ce08b88e9a63cc47d8bcedc90e7e451517bf
                 }
                 else {
                     hideDiffPanel();
                 }
             }
+<<<<<<< HEAD
+=======
+            function getFileContent(filePath) {
+                var fileLocation = require("path").join(repoFullPath, filePath);
+                var fs = require('fs');
+                return fs.readFileSync(fileLocation);
+            }
+            function writeContentToFile(filePath, content) {
+                var fileLocation = require("path").join(repoFullPath, filePath);
+                var fs = require('fs');
+                fs.writeFile(fileLocation, content, function (err, data) {
+                    document.getElementById("savechanges-button").disabled = true;
+                });
+            }
+>>>>>>> a007ce08b88e9a63cc47d8bcedc90e7e451517bf
             function printNewFile(filePath) {
                 var fileLocation = require("path").join(repoFullPath, filePath);
                 var lineReader = require("readline").createInterface({

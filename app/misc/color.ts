@@ -16,7 +16,8 @@ function changeColor(color) {
   let fp = document.getElementById('file-panel');
   let p = document.getElementsByTagName('p');
   let h1 = document.getElementsByTagName('h1');
-  let diffp = document.getElementById('diff-panel-body');
+  let diffp = document.getElementById('diff-panel');
+  let editp = document.getElementById('texteditor-panel')
   let network = document.getElementById('my-network');
   let footer = document.getElementById('footer');
   let arp = document.getElementById('add-repository-panel');
@@ -49,6 +50,9 @@ function changeColor(color) {
     diffp.style.color = '#D2D3D4';
     diffp.style.backgroundColor = '#616161';
     diffp.style.outlineColor = '#181818';
+    editp.style.color = '#D2D3D4';
+    editp.style.backgroundColor = '#616161';
+    editp.style.outlineColor = '#181818';
     network.style.backgroundColor = '#D6D6D6';
     footer.style.backgroundColor = '#E3E3E3';
     footer.style.borderTopColor = '#181818';
@@ -87,6 +91,9 @@ function changeColor(color) {
     diffp.style.color = '#fff';
     diffp.style.backgroundColor = '#282828';
     diffp.style.outlineColor = '#181818';
+    editp.style.color = '#fff';
+    editp.style.backgroundColor = '#282828';
+    editp.style.outlineColor = '#181818';
     network.style.backgroundColor = '#181818';
     footer.style.backgroundColor = '#282828';
     footer.style.borderTopColor = '#181818';
@@ -124,6 +131,9 @@ function changeColor(color) {
     diffp.style.color = '#D2D3D4';
     diffp.style.backgroundColor = '#616161';
     diffp.style.outlineColor = '#ceff99';
+    editp.style.color = '#D2D3D4';
+    editp.style.backgroundColor = '#616161';
+    editp.style.outlineColor = '#ceff99';
     network.style.backgroundColor = '#e6ffcc';
     footer.style.backgroundColor = '#e6ffcc';
     footer.style.borderTopColor = '#CEFF99';
@@ -162,6 +172,9 @@ function changeColor(color) {
     diffp.style.color = '#D2D3D4';
     diffp.style.backgroundColor = '#616161';
     diffp.style.outlineColor = '#cce5ff';
+    editp.style.color = '#D2D3D4';
+    editp.style.backgroundColor = '#616161';
+    editp.style.outlineColor = '#cce5ff';
     network.style.backgroundColor = '#e6f2ff';
     footer.style.backgroundColor = '#e6f2ff';
     footer.style.borderTopColor = '#cce5ff';

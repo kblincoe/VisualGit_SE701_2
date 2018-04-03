@@ -4,7 +4,10 @@ import { Component } from "@angular/core";
   selector: "diff-panel",
   template: `
   <div class="diff-panel" id="diff-panel">
-    <div class="diff-panel-body" id="diff-panel-body"></div>
+    <div class="edit-button-banner" id="edit-button-banner">
+    </div>
+    <div class="diff-panel-body" id="diff-panel-body">
+    </div>
   </div>
   `
 })
