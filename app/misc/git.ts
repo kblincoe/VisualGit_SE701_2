@@ -15,12 +15,13 @@ let modifiedFiles;
 let hasChangedFiles: boolean;
 const { remote } = require('electron')
 const { dialog } = remote
+const simpleGit = require("simple-git");
+let sign;
 
 
 function warnIfCommitsNotOnRemote() {
 
   // Could not find a way to get the log of commits that are not on remotes with nodegit, so using simple-git instead
-  const simpleGit = require("simple-git");
   const path = repoFullPath;
 
   if (path == null || path == "") {
@@ -29,20 +30,20 @@ function warnIfCommitsNotOnRemote() {
 
   simpleGit(path).raw(
     [
-      "log" ,
-      "--branches", 
-      "--not" ,
+      "log",
+      "--branches",
+      "--not",
       "--remotes"
     ], (err, result) => {
 
       console.debug(result);
       displayModal("WARNING: You have unsaved commits!");
 
-  });
+    });
 
 }
 
-function addAndCommit() {
+function commit() {
   let repository;
 
   Git.Repository.open(repoFullPath)
@@ -66,7 +67,7 @@ function addAndCommit() {
         }
       }
       console.log("2.1");
-      return index.addAll(filesToStage);
+      // return index.addAll(filesToStage);
     })
 
     .then(function () {
@@ -92,10 +93,7 @@ function addAndCommit() {
 
     .then(function (parent) {
       console.log("7.0");
-      let sign;
-      if (username !== null && password !== null) {
-        sign = Git.Signature.now(username, password);
-      } else {
+      if (sign == undefined) {
         sign = Git.Signature.default(repository);
       }
       commitMessage = document.getElementById('commit-message-input').value;
@@ -112,13 +110,12 @@ function addAndCommit() {
     })
     .then(function (oid) {
       theirCommit = null;
-      //console.log("8.0");
+      console.log("8.0");
       console.log("Commit successful: " + oid.tostrS());
 
       hideDiffPanel();
-      clearModifiedFilesList();
+      //clearModifiedFilesList();
       clearCommitMessage();
-      clearSelectAllCheckbox();
       for (let i = 0; i < filesToAdd.length; i++) {
         addCommand("git add " + filesToAdd[i]);
       }
@@ -154,10 +151,6 @@ function clearStaleFiles(repoPath, fileName) {
 }
 function clearCommitMessage() {
   document.getElementById('commit-message-input').value = "";
-}
-
-function clearSelectAllCheckbox() {
-  document.getElementById('select-all-checkbox').checked = false;
 }
 
 function getAllCommits(callback) {
@@ -508,271 +501,76 @@ function resetCommit(name: string) {
 function revertCommit(name: string, commitId: string) {
   let repos;
   Git.Repository.open(repoFullPath)
-  .then(function(repo) {
-    repos = repo;
-    console.log(1.0);
+    .then(function (repo) {
+      repos = repo;
+      console.log(1.0);
 
-    if (commitId) {
-      addCommand("git revert " + commitId);
-      return Git.Commit.lookup(repos, commitId);
-    }
+      if (commitId) {
+        addCommand("git revert " + commitId);
+        return Git.Commit.lookup(repos, commitId);
+      }
 
-    addCommand("git revert " + name + "~1");
-    return Git.Reference.nameToId(repo, name);
-  })
-  .then(function(id) {
-    console.log('2.0' + id);
-    return Git.Commit.lookup(repos, id);
-  })
-  .then(function(commit) {
-    let revertOptions = new Git.RevertOptions();
-    if (commit.parents().length > 1) {
-      revertOptions.mainline = 1;
-    }
-    return Git.Revert.revert(repos, commit, revertOptions);
-  })
-  .then(function(number) {
-    console.log(number);
-    if (number === -1) {
-      updateModalText("Revert failed, please check if you have pushed the commit.");
-    } else {
-      updateModalText("Revert successfully.");
-    }
-    refreshAll(repos);
-  }, function(err) {
-    updateModalText(err);
+      addCommand("git revert " + name + "~1");
+      return Git.Reference.nameToId(repo, name);
+    })
+    .then(function (id) {
+      console.log('2.0' + id);
+      return Git.Commit.lookup(repos, id);
+    })
+    .then(function (commit) {
+      let revertOptions = new Git.RevertOptions();
+      if (commit.parents().length > 1) {
+        revertOptions.mainline = 1;
+      }
+      return Git.Revert.revert(repos, commit, revertOptions);
+    })
+    .then(function (number) {
+      console.log(number);
+      if (number === -1) {
+        updateModalText("Revert failed, please check if you have pushed the commit.");
+      } else {
+        updateModalText("Revert successfully.");
+      }
+      refreshAll(repos);
+    }, function (err) {
+      updateModalText(err);
+    });
+}
+
+function getCurrentDiff(commit, filePath, callback) {
+  commit.getTree().then(function (tree) {
+    Git.Diff.treeToWorkdir(repo, tree, null).then(function (diff) {
+      processDiff(diff, filePath, callback);
+    });
   });
 }
 
-function displayModifiedFiles() {
-  modifiedFiles = [];
-  Git.Repository.open(repoFullPath)
-    .then(function (repo) {
-      console.log(repo.isMerging() + "ojoijnkbunmm");
-      let filePaths = document.getElementsByClassName('file-path');
-      for (let i = 0; i < filePaths.length; i++) {
-          if (filePaths[i].parentNode.className !== "file file-deleted") {
-              clearStaleFiles(repoFullPath, filePaths[i]);
-        }
-      }
-      repo.getStatus().then(function (statuses) {
+function getStagedDiff(commit, filePath, callback) {
+  commit.getTree().then(function (tree) {
+    Git.Diff.treeToIndex(repo, tree, null).then(function (diff) {
+      processDiff(diff, filePath, callback);
+    });
+  });
+}
 
-        statuses.forEach(addModifiedFile);
-        if (modifiedFiles.length !== 0) {
-          hasChangedFiles = true;
-          if (document.getElementById("modified-files-message") !== null) {
-            let filePanelMessage = document.getElementById("modified-files-message");
-            filePanelMessage.parentNode.removeChild(filePanelMessage);
-          }
-        }
-        modifiedFiles.forEach(displayModifiedFile);
-
-        // Add modified file to array of modified files 'modifiedFiles'
-        function addModifiedFile(file) {
-          // Check if modified file is already being displayed
-          let filePaths = document.getElementsByClassName('file-path');
-          for (let i = 0; i < filePaths.length; i++) {
-            if (filePaths[i].innerHTML === file.path()) {
-              return;
-            }
-          }
-
-          let path = file.path();
-          let modification = calculateModification(file);
-          modifiedFiles.push({
-            filePath: path,
-            fileModification: modification
-          });
-        }
-
-        // Find HOW the file has been modified
-        function calculateModification(status) {
-          if (status.isNew()) {
-            return "NEW";
-          } else if (status.isModified()) {
-            return "MODIFIED";
-          } else if (status.isDeleted()) {
-            return "DELETED";
-          } else if (status.isTypechange()) {
-            return "TYPECHANGE";
-          } else if (status.isRenamed()) {
-            return "RENAMED";
-          } else if (status.isIgnored()) {
-            return "IGNORED";
-          }
-        }
-
-        // Add the modified file to the left file panel
-        function displayModifiedFile(file) {
-          let filePath = document.createElement("p");
-          filePath.className = "file-path";
-          filePath.innerHTML = file.filePath;
-          let fileElement = document.createElement("div");
-          // Set how the file has been modified
-          if (file.fileModification === "NEW") {
-            fileElement.className = "file file-created";
-          } else if (file.fileModification === "MODIFIED") {
-            fileElement.className = "file file-modified";
-          } else if (file.fileModification === "DELETED") {
-            fileElement.className = "file file-deleted";
-          } else {
-            fileElement.className = "file";
-          }
-
-          fileElement.appendChild(filePath);
-
-          let checkbox = document.createElement("input");
-          checkbox.type = "checkbox";
-          checkbox.className = "checkbox";
-          fileElement.appendChild(checkbox);
-
-          /* Checkbox's onclick is called before the file element's. We want checkbox activation to prevent execution of the file element 
-          onclick so using a lock variable to achieve that. Variable is locked when checkbox is used which prevents the parent onclick 
-          from executing. */
-          let isCheckboxClicked = false;
-        checkbox.onclick = () => {
-          isCheckboxClicked = true; // lock
-          if (checkbox.checked == false) {
-            clearSelectAllCheckbox();
-          }
-        }
-
-        document.getElementById("files-changed").appendChild(fileElement);
-
-        fileElement.onclick = () => {
-          if (!isCheckboxClicked) {
-            showOrHideDiffPanel(fileElement, file);
-          }
-          isCheckboxClicked = false; //unlock
-        }
-      }
-
-      function showOrHideDiffPanel(fileElement, file) {
-        let doc = document.getElementById("diff-panel");
-        let editdoc = document.getElementById("texteditor-panel");
-        console.log(doc.style.width + 'oooooo');
-        
-        /* if the file text editor is open, ignore the click on the file so the only way a user can
-          leave the editor is through clicking the 'Close editor' button */
-        if (!(editdoc.style.width === '0px' || editdoc.style.width === '')) {
-          return;
-        }
-        if (doc.style.width === '0px' || doc.style.width === '') {
-          displayDiffPanel();
-          document.getElementById("diff-panel-body").innerHTML = "";
-
-          if (fileElement.className === "file file-created") {
-            printNewFile(file.filePath);
-          } else {
-            printFileDiff(file.filePath);
-          }
-          /* set up the event handlers on all the buttons in the difference panel and in the file
-             text editor panel. */
-          document.getElementById("editfile-button").onclick = () => {
-            displayFileTexteditor();
-            document.getElementById("texteditor-content").value = getFileContent(file.filePath);
-            // set save changes button to disabled until the user has made changes to the file
-            document.getElementById("savechanges-button").disabled = true;
-            document.getElementById("texteditor-content").onkeyup = () => {
-              document.getElementById("savechanges-button").disabled = false;
-            }
-            document.getElementById("closeeditor-button").onclick = () => {
-              /* close the text editor panel and reopen the differences panel using the same method
-                 so that the panel can update to reflect the changes made in the text editor. */ 
-              hideFileTexteditor();
-              showOrHideDiffPanel(fileElement, file)
-            }
-            document.getElementById("savechanges-button").onclick = () => {
-              writeContentToFile(file.filePath, document.getElementById("texteditor-content").value)
-            }
-          }
-        } else {
-          hideDiffPanel();
-        }
-      }
-
-      function getFileContent(filePath) {
-        let fileLocation = require("path").join(repoFullPath, filePath);
-        let fs = require('fs');
-        return fs.readFileSync(fileLocation);
-      }
-      function writeContentToFile(filePath, content) {
-        let fileLocation = require("path").join(repoFullPath, filePath);
-        let fs = require('fs');
-        fs.writeFile(fileLocation, content, function (err, data) {
-          document.getElementById("savechanges-button").disabled = true;
-        });
-      }
-
-        function printNewFile(filePath) {
-          let fileLocation = require("path").join(repoFullPath, filePath);
-          let lineReader = require("readline").createInterface({
-            input: fs.createReadStream(fileLocation)
-          });
-
-          lineReader.on("line", function (line) {
-            formatNewFileLine(line);
-          });
-        }
-
-        function printFileDiff(filePath) {
-          repo.getHeadCommit().then(function (commit) {
-            getCurrentDiff(commit, filePath, function (line) {
-              formatLine(line);
-            });
-          });
-        }
-
-        function getCurrentDiff(commit, filePath, callback) {
-          commit.getTree().then(function (tree) {
-            Git.Diff.treeToWorkdir(repo, tree, null).then(function (diff) {
-              diff.patches().then(function (patches) {
-                patches.forEach(function (patch) {
-                  patch.hunks().then(function (hunks) {
-                    hunks.forEach(function (hunk) {
-                      hunk.lines().then(function (lines) {
-                        let oldFilePath = patch.oldFile().path();
-                        let newFilePath = patch.newFile().path();
-                        if (newFilePath === filePath) {
-                          lines.forEach(function (line) {
-                            callback(String.fromCharCode(line.origin()) + line.content());
-                          });
-                        }
-                      });
-                    });
-                  });
-                });
+function processDiff(diff, filePath, callback) {
+  diff.patches().then(function (patches) {
+    patches.forEach(function (patch) {
+      patch.hunks().then(function (hunks) {
+        hunks.forEach(function (hunk) {
+          hunk.lines().then(function (lines) {
+            let oldFilePath = patch.oldFile().path();
+            let newFilePath = patch.newFile().path();
+            if (newFilePath === filePath) {
+              lines.forEach(function (line) {
+                callback(String.fromCharCode(line.origin()) + line.content());
               });
-            });
+            }
           });
-        }
-
-        function formatLine(line) {
-          let element = document.createElement("div");
-
-          if (line.charAt(0) === "+") {
-            element.style.backgroundColor = "#84db00";
-            line = line.slice(1, line.length);
-          } else if (line.charAt(0) === "-") {
-            element.style.backgroundColor = "#ff2448";
-            line = line.slice(1, line.length);
-          }
-
-          element.innerText = line;
-          document.getElementById("diff-panel-body").appendChild(element);
-        }
-
-        function formatNewFileLine(text) {
-          let element = document.createElement("div");
-          element.style.backgroundColor = green;
-          element.innerHTML = text;
-          document.getElementById("diff-panel-body").appendChild(element);
-        }
+        });
       });
-    },
-      function (err) {
-        console.log("waiting for repo to be initialised");
-      });
+    });
+  });
 }
 
 function pull() {
@@ -783,7 +581,7 @@ function pull() {
 function cleanCurrentRepo() {
   Git.Repository.open(repoFullPath)
     .then(cleanRepo)
-    .then(function(repository: Repository) {
+    .then(function (repository: Repository) {
       addCommand('git clean -f');
       refreshAll(repository);
       displayModifiedFiles();
@@ -792,7 +590,7 @@ function cleanCurrentRepo() {
 
 function cleanRepo(repository: Repository) {
   repository.getStatus()
-    .then(function(arrayStatusFile: StatusFile[]) {
+    .then(function (arrayStatusFile: StatusFile[]) {
       removeUntrackedFiles(arrayStatusFile);
     });
 
@@ -802,7 +600,7 @@ function cleanRepo(repository: Repository) {
 function removeUntrackedFiles(arrayStatusFile: StatusFile[]) {
   let filesToClean: String[] = [];
 
-  arrayStatusFile.forEach(function(statusFile: StatusFile) {
+  arrayStatusFile.forEach(function (statusFile: StatusFile) {
 
     // Files marked as new are untracked, hence should be removed
     // Files removed with fs as nodegit does not have implementation of git clean
@@ -821,7 +619,19 @@ function removeFileFromRepo(statusFile: StatusFile) {
     if (err) {
       addCommand('git clean failed: ' + err);
     }
-  }); 
+  });
+}
+
+function stageFiles(fileNames) {
+  simpleGit(repoFullPath).add(fileNames, displayModifiedFiles);
+}
+
+function unstageFiles(fileNames) {
+  simpleGit(repoFullPath).raw([
+    'reset',
+    '--',
+    ...fileNames
+  ], displayModifiedFiles);
 }
 
 window.addEventListener('beforeunload', evt => {

@@ -1,6 +1,6 @@
 <!doctype html>
 
-<html
+<html>
 
 <head lang="en">
   <title>VisualGit</title>
@@ -14,6 +14,8 @@
   <script src="app/misc/checkbox.js"></script>
   <script src="app/misc/gitCommands.js"></script>
   <script src="app/misc/git.js"></script>
+  <script src="app/misc/updateFilePanel.js"></script> +
+  <script src="app/misc/showDiffPanel.js"></script>
   <script src="app/misc/graphing.js"></script>
   <script src="app/misc/images.js"></script>
   <script src="app/misc/repo.js"></script>
@@ -52,7 +54,7 @@
       // Add click event to Commit button
       document.getElementById('commit-button').addEventListener("click", function () {
         console.log("commit clicked");
-        addAndCommit();
+        commit();
       });
 
       // Add click event to Clean button

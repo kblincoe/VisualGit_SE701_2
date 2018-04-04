@@ -92,7 +92,7 @@ import { Component } from "@angular/core";
 
 export class IssuesMenu implements OnInit {
 
-  myIssues: Object[] = issues
+  myIssues: Object[] = []
   newIssueTitle: String  = ""
   newIssueDescription: String = ""
 

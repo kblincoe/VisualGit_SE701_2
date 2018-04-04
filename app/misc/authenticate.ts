@@ -123,6 +123,7 @@ function saveLoginDetails(username, password){
 function setCredentials(username, password) {
   cred = Git.Cred.userpassPlaintextNew(username, password);
 
+  sign = Git.Signature.now(username, password);
   client = github.client({
     username: username,
     password: password
@@ -140,7 +141,7 @@ function clearCredentials() {
   from GitHub as expected. Achieves sign out functionality.
   */
   cred = undefined;
-
+  sign = undefined;
   client = undefined;
 }
 
